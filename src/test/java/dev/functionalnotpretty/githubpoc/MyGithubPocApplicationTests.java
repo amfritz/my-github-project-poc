@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.my_github_poc;
+package dev.functionalnotpretty.githubpoc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

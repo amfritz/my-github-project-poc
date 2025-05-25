@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.my_github_poc;
+package dev.functionalnotpretty.githubpoc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
