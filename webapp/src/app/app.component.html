@@ -1,0 +1,6 @@
+<p>app components</p>
+@if (gitRepos !== undefined) {
+    @for(repo of gitRepos; track repo.id ) {
+        <p><a [href]="repo.html_url">{{repo.name }}</a> is private: {{ repo.private }} </p>
+    }
+}

@@ -1,0 +1,332 @@
+
+[
+  {
+    "sha": "bb885d18b00475c67fcc0053c0eb36d0bfe56500",
+    "node_id": "C_kwDOOwXAiNoAKGJiODg1ZDE4YjAwNDc1YzY3ZmNjMDA1M2MwZWIzNmQwYmZlNTY1MDA",
+    "commit": {
+      "author": {
+        "name": "Andrew",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T20:35:50Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-05-25T20:35:50Z"
+      },
+      "message": "Merge pull request #1 from amfritz/project-init\n\nProject init",
+      "tree": {
+        "sha": "5112524ead8c9f839e7d0be95075bdf8c44d1da0",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/trees/5112524ead8c9f839e7d0be95075bdf8c44d1da0"
+      },
+      "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/commits/bb885d18b00475c67fcc0053c0eb36d0bfe56500",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJoM38mCRC1aQ7uu5UhlAAAURIQAJr2v1+NxXzVVLGWw1bYisLN\nvkABPpgQlWEYQpYQKx+3h01u4641BiFlEH3LNuUpTGdingbam6GzndON1LHmC290\nMRfIczytY2rt0xZFdegNO56cVtKq9yCQdyG56Z9AFdpUuBediGTN6Po3vRELbGCl\n5r5GzuOPu3g32fl+BMckBcx+c9ALC28wDWfZLKzeDJYU3YH2RUQbPSj9qqo5eIXc\nAf0vj9sGtXINngY3dCS615Er8g9lCC/Vh6figCMKIC0sqN3GBk3Pxwrb/2X/Qncs\ntwLXwqSJ7PS3ARz57iATAD0Ovfoj158sM8zDix3mpxACq6IZbxuCxXtOwAuC/Rhs\nc8Yx3Nlq9DCWZX2feTx3xYhiMtaIz7yaZK7gUwhnPx5tXTxexD69HiC1K0OskBRo\n+I3t2Wht4XV7fCQ/tkyiFKdWGDxRhzZPAu5VBOfGGy3ek0UGBgN4DWY1wpO3Q/J3\ne3majZDs9g4ue1Ijw8YkAViAZC4A0hVPVo3c1mi6nQrX36sadAJzPD5sXIb8E8L9\n7A3IDrMSBKHG7hp70S+0Ck9x5BcoUgxD6IC3i1v8hJDFo6efB7rDg7lJNGU9ojWm\n+BWPFc+6z86G1saFbeIDaM7j3wLAOC95kd7PIR9WySBUyBJRLWv1JhTiz1SUhtJq\npearB3Ft7EpedcDHYpnD\n=uu5F\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 5112524ead8c9f839e7d0be95075bdf8c44d1da0\nparent 7a9ef63cec84f29fcb9a8fd97eff75184d01e93e\nparent daa0a4d7539c29c17743b818346687c191a33a4b\nauthor Andrew <amfritz@gmail.com> 1748205350 -0400\ncommitter GitHub <noreply@github.com> 1748205350 -0400\n\nMerge pull request #1 from amfritz/project-init\n\nProject init",
+        "verified_at": "2025-05-25T20:35:58Z"
+      }
+    },
+    "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/bb885d18b00475c67fcc0053c0eb36d0bfe56500",
+    "html_url": "https://github.com/amfritz/my-github-project-poc/commit/bb885d18b00475c67fcc0053c0eb36d0bfe56500",
+    "comments_url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/bb885d18b00475c67fcc0053c0eb36d0bfe56500/comments",
+    "author": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+        "html_url": "https://github.com/amfritz/my-github-project-poc/commit/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e"
+      },
+      {
+        "sha": "daa0a4d7539c29c17743b818346687c191a33a4b",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/daa0a4d7539c29c17743b818346687c191a33a4b",
+        "html_url": "https://github.com/amfritz/my-github-project-poc/commit/daa0a4d7539c29c17743b818346687c191a33a4b"
+      }
+    ]
+  },
+  {
+    "sha": "daa0a4d7539c29c17743b818346687c191a33a4b",
+    "node_id": "C_kwDOOwXAiNoAKGRhYTBhNGQ3NTM5YzI5YzE3NzQzYjgxODM0NjY4N2MxOTFhMzNhNGI",
+    "commit": {
+      "author": {
+        "name": "amfriz",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T20:34:53Z"
+      },
+      "committer": {
+        "name": "amfriz",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T20:34:53Z"
+      },
+      "message": "refactored package name to something less annoying",
+      "tree": {
+        "sha": "5112524ead8c9f839e7d0be95075bdf8c44d1da0",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/trees/5112524ead8c9f839e7d0be95075bdf8c44d1da0"
+      },
+      "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/commits/daa0a4d7539c29c17743b818346687c191a33a4b",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/daa0a4d7539c29c17743b818346687c191a33a4b",
+    "html_url": "https://github.com/amfritz/my-github-project-poc/commit/daa0a4d7539c29c17743b818346687c191a33a4b",
+    "comments_url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/daa0a4d7539c29c17743b818346687c191a33a4b/comments",
+    "author": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "b44e358fcf858935d26acfdf2d167af46729a5d9",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/b44e358fcf858935d26acfdf2d167af46729a5d9",
+        "html_url": "https://github.com/amfritz/my-github-project-poc/commit/b44e358fcf858935d26acfdf2d167af46729a5d9"
+      }
+    ]
+  },
+  {
+    "sha": "b44e358fcf858935d26acfdf2d167af46729a5d9",
+    "node_id": "C_kwDOOwXAiNoAKGI0NGUzNThmY2Y4NTg5MzVkMjZhY2ZkZjJkMTY3YWY0NjcyOWE1ZDk",
+    "commit": {
+      "author": {
+        "name": "amfriz",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T20:04:48Z"
+      },
+      "committer": {
+        "name": "amfriz",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T20:04:48Z"
+      },
+      "message": "initialized project via spring",
+      "tree": {
+        "sha": "7fc4a4f333501c0e119dd87836b12439b1b44086",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/trees/7fc4a4f333501c0e119dd87836b12439b1b44086"
+      },
+      "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/commits/b44e358fcf858935d26acfdf2d167af46729a5d9",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/b44e358fcf858935d26acfdf2d167af46729a5d9",
+    "html_url": "https://github.com/amfritz/my-github-project-poc/commit/b44e358fcf858935d26acfdf2d167af46729a5d9",
+    "comments_url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/b44e358fcf858935d26acfdf2d167af46729a5d9/comments",
+    "author": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+        "html_url": "https://github.com/amfritz/my-github-project-poc/commit/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e"
+      }
+    ]
+  },
+  {
+    "sha": "7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+    "node_id": "C_kwDOOwXAiNoAKDdhOWVmNjNjZWM4NGYyOWZjYjlhOGZkOTdlZmY3NTE4NGQwMWU5M2U",
+    "commit": {
+      "author": {
+        "name": "Andrew",
+        "email": "amfritz@gmail.com",
+        "date": "2025-05-25T19:06:48Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2025-05-25T19:06:48Z"
+      },
+      "message": "Initial commit",
+      "tree": {
+        "sha": "a27906100fb7ea44dd41d2fffb17bc4985ddece4",
+        "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/trees/a27906100fb7ea44dd41d2fffb17bc4985ddece4"
+      },
+      "url": "https://api.github.com/repos/amfritz/my-github-project-poc/git/commits/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJoM2pICRC1aQ7uu5UhlAAAODQQAHKUOUmbugY7KuJlde+Qxf2X\nuX5cqfEjeL96IjZVJB2rSyYhpGiJ9PfoteTWTilKayKrmQZF2xi5Ow5YpECpuBe5\n7s1gaclZTQpgNnE/NNRniRW747kZ2IErt++IGd9FQYgKbIM3Wiv7KoPkBfxMdfcS\nC236hCFqY4N1wg2wrVwYDhrqh8pz0P+SLEUhESL2a14Bz2CuqColyN1itNG0Wcxj\nEf/HGpQs0DSs68cmXLvjDWO0qQIDqGYWMRiWzKxekWzx4+s0GAIR+7pUcPVFgWFq\nCOonCqsMfDru7In7U8aVk44eJILNUY3Hg1MSewNX40WQLV3eNRGGoxns5tz2Ukht\n87yULd3AiH/DX/yph9Ad+5SwBUMXyvRIbj2qG/5Jw6axx8IlUsDebrb5eTM4bCwe\n2Qj3v1pMLXv2vwVjeo8eDV5KeK9LLRXZxmY30Wbo7Rfp2UAFdBQwYt/udigEEVbF\n9jZzmhO2xJ/3+uZQIMrzg3/FDeDgjxzxiYaBkeCJxqIWT3iNV/rAZTGk1FUesI4m\n6BJ8I1ehIw1I3WXHULIYT9iU4X7jwCqK8BJyBt4JMPDKxBuOlidL77YGsocarKjs\n0nByfnC+sFhA9TiLBgxe0gV79FRJzAB602oPjJ4NkZIwyYvNuCd5VerJvfZhHKcV\n0/1W7bMk53ykoe8egV4d\n=CAjm\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree a27906100fb7ea44dd41d2fffb17bc4985ddece4\nauthor Andrew <amfritz@gmail.com> 1748200008 -0400\ncommitter GitHub <noreply@github.com> 1748200008 -0400\n\nInitial commit",
+        "verified_at": "2025-05-25T19:11:50Z"
+      }
+    },
+    "url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+    "html_url": "https://github.com/amfritz/my-github-project-poc/commit/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e",
+    "comments_url": "https://api.github.com/repos/amfritz/my-github-project-poc/commits/7a9ef63cec84f29fcb9a8fd97eff75184d01e93e/comments",
+    "author": {
+      "login": "amfritz",
+      "id": 14959603,
+      "node_id": "MDQ6VXNlcjE0OTU5NjAz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14959603?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/amfritz",
+      "html_url": "https://github.com/amfritz",
+      "followers_url": "https://api.github.com/users/amfritz/followers",
+      "following_url": "https://api.github.com/users/amfritz/following{/other_user}",
+      "gists_url": "https://api.github.com/users/amfritz/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/amfritz/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/amfritz/subscriptions",
+      "organizations_url": "https://api.github.com/users/amfritz/orgs",
+      "repos_url": "https://api.github.com/users/amfritz/repos",
+      "events_url": "https://api.github.com/users/amfritz/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/amfritz/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+
+    ]
+  }
+]
