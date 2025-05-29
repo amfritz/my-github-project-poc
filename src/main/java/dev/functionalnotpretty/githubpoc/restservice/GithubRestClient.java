@@ -1,7 +1,7 @@
 package dev.functionalnotpretty.githubpoc.restservice;
 
-import dev.functionalnotpretty.githubpoc.restservice.model.GithubRepo;
-import dev.functionalnotpretty.githubpoc.restservice.model.GithubRepoCommit;
+import dev.functionalnotpretty.githubpoc.entities.GitHubRepo;
+import dev.functionalnotpretty.githubpoc.entities.GitHubRepoCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,41 +27,23 @@ public class GithubRestClient {
                 .build();
     }
 
-    public List<GithubRepo> getUserRepos() {
+    // curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/user/repos
+    public List<GitHubRepo> getUserRepos() {
         log.info("getUserRepos called");
-        try {
-            var result = this.githubRestClient.get()
-                    .uri("/user/repos")
-                    .retrieve()
-                    .body(new ParameterizedTypeReference<List<GithubRepo>>() {});
-//            if (result!= null) {
-//                log.info("got {} repos", result.size());
-//            }
-            return result;
-        }
-        catch (Exception e) {
-            log.error("Exception caught during github request", e);
-        }
-        return null;
+        return this.githubRestClient.get()
+                .uri("/user/repos")
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<GitHubRepo>>() {});
     }
 
-    public List<GithubRepoCommit> getUserRepoCommits(String userId, String repo) {
+    // // curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/repos/amfritz/my-github-project-poc/commits
+    //
+    public List<GitHubRepoCommit> getUserRepoCommits(String userId, String repo) {
         log.info("getUserRepoCommits called");
-        try {
-            var result = this.githubRestClient.get()
-                    .uri("/repos/{userid}/{repo}/commits", userId, repo)
-                    .retrieve()
-                    .body(new ParameterizedTypeReference<List<GithubRepoCommit>>() {});
-//            if (result!= null) {
-//                log.info("got {} commits", result.size());
-//            }
-            return result;
-        }
-        catch (Exception e) {
-            log.error("Exception caught during github request", e);
-        }
-        return null;
+        return this.githubRestClient.get()
+                .uri("/repos/{userid}/{repo}/commits", userId, repo)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<GitHubRepoCommit>>() {});
     }
-
-
 }
+
