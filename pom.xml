@@ -12,7 +12,7 @@
 	<artifactId>my-github-poc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>my-github-poc</name>
-	<description>My github project proof of concept</description>
+	<description>My GitHub project proof of concept</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -31,6 +31,8 @@
 		<spring-cloud-azure.version>5.22.0</spring-cloud-azure.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
+		<node.version>v22.14.0</node.version>
+		<npm.version>11.3.0</npm.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -117,6 +119,66 @@
 						<maxReplicas>10</maxReplicas>
 					</scale>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>copy-frontend</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/src/main/resources/static</outputDirectory> <!-- Copy to classpath:/static/ -->
+							<resources>
+								<resource>
+									<directory>${project.basedir}/webapp/dist/webapp/browser</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.15.1</version>
+				<executions>
+					<execution>
+						<id>install-node-and-npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+							<installDirectory>${project.basedir}/webapp/node</installDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm-install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+							<workingDirectory>${project.basedir}/webapp/</workingDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm-build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+							<workingDirectory>${project.basedir}/webapp/</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

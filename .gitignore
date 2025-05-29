@@ -1,5 +1,7 @@
 HELP.md
 target/
+## for angular build
+src/main/resources/static
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
