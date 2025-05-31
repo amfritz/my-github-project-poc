@@ -27,7 +27,7 @@ public class GithubRestClient {
                 .build();
     }
 
-    // curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/user/repos
+    // curl -i -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/user/repos
     public List<GitHubRepo> getUserRepos() {
         log.info("getUserRepos called");
         return this.githubRestClient.get()
@@ -36,7 +36,7 @@ public class GithubRestClient {
                 .body(new ParameterizedTypeReference<List<GitHubRepo>>() {});
     }
 
-    // // curl -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/repos/amfritz/my-github-project-poc/commits
+    // // curl -i -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/repos/amfritz/my-github-project-poc/commits
     //
     public List<GitHubRepoCommit> getUserRepoCommits(String userId, String repo) {
         log.info("getUserRepoCommits called");

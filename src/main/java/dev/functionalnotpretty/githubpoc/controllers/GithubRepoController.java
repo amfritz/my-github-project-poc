@@ -1,9 +1,8 @@
 package dev.functionalnotpretty.githubpoc.controllers;
 
-import dev.functionalnotpretty.githubpoc.models.GitHubRepoCommitResponse;
-import dev.functionalnotpretty.githubpoc.models.GitHubRepoResponse;
-import dev.functionalnotpretty.githubpoc.restservice.GithubRestClient;
+import dev.functionalnotpretty.githubpoc.entities.GitHubRepo;
 import dev.functionalnotpretty.githubpoc.entities.GitHubRepoCommit;
+import dev.functionalnotpretty.githubpoc.restservice.GithubRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,26 +23,21 @@ public class GithubRepoController {
     }
 
     @GetMapping
-    public List<GitHubRepoResponse> getRepos() {
+    public List<GitHubRepo> getRepos() {
         log.info("get repos");
-        var result = githubRestClient.getUserRepos().
-                stream()
-                .map(GitHubRepoResponse::mapRepo)
-                .toList();
+        // returning the 'raw' github object to the client. it's read only, client doesn't operate on gh data.
+        var result = githubRestClient.getUserRepos();
         log.info("get {} repos", result.size());
         // TODO -- handle errors & no content. this is POC.
         return result;
     }
 
     @GetMapping("{repo}/commits")
-    public List<GitHubRepoCommitResponse> getRepoCommits(@PathVariable("repo") String repo) {
+    public List<GitHubRepoCommit> getRepoCommits(@PathVariable("repo") String repo) {
         log.info("getting repo ({}) commits", repo);
-        var commits = githubRestClient.getUserRepoCommits("amfritz", repo)
-                .stream()
-                .map(GitHubRepoCommitResponse::mapCommit)
-                .toList();
+        // returning the 'raw' github object to the client. it's read only, client doesn't operate on gh data.
+        var commits = githubRestClient.getUserRepoCommits("amfritz", repo);
         log.info("got {} commits ", commits.size());
-        // TODO -- clean this up
         return commits;
     }
 }

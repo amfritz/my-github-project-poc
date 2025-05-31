@@ -1,5 +1,0 @@
-@if (gitRepos !== undefined) {
-    @for(repo of gitRepos; track repo.id ) {
-        <p><a [routerLink]="['/repo', repo.name]" >{{repo.name }}</a> is private: {{ repo.isPrivate ? 'true' : 'false' }} </p>
-    }
-}
