@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { RepoSelectComponent } from "./repo/repo-select/repo-select.component";
+import { CreateProjectComponent } from "./projects/create-project/create-project.component";
 
 @Component({
   selector: 'app-root',

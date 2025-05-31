@@ -1,18 +1,18 @@
 import { Routes } from '@angular/router';
-import { RepoSelectComponent } from './repo/repo-select/repo-select.component';
-import { CommitSelectComponent } from './repo/commit-select/commit-select.component';
-import { WatchedReposComponent } from './projects/watched-repos/watched-repos.component';
+import { CreateProjectComponent } from './projects/create-project/create-project.component';
+import { CommitSelectComponent } from './projects/commit-list/commit-list.component';
+import { ProjectsComponent } from './projects/projects.component';
 
 export const routes: Routes = [
     {
         path: '',
-        component: WatchedReposComponent,
-        title: 'Watched repositories'
+        component: ProjectsComponent,
+        title: 'Projects List'
     },
     {
-        path: 'select-repos',
-        component: RepoSelectComponent,
-        title: 'Available repositories'
+        path: 'create-project',
+        component: CreateProjectComponent,
+        title: 'Create New Project'
     },
     {
         path: 'repo/:repoName',

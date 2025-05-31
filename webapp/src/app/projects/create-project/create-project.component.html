@@ -1,0 +1,15 @@
+<h3>Select a repository to create a project from it</h3>
+@if (gitRepos !== undefined) {
+    <ul>
+    @for(repo of gitRepos; track repo.id ) {
+        <li (click)="showCommits(repo)">{{repo.name }}, {{ repo.description }}, it is private: {{ repo.isPrivate ? 'true' : 'false' }} </li>
+    }
+    </ul>
+
+    <button (click)="createProject()">create a project</button>
+}
+@if (gitCommits !== undefined) {
+    <app-commit-list [commits]="gitCommits" />
+}
+
+<p>Or create a new project and repository at the same time.</p>

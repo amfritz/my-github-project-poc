@@ -21,7 +21,7 @@ public class MyGithubPocApplication {
 //			var result = githubRestClient.getUserRepos();
 //			if (result!=null) {
 //				for(GithubRepo repo : result) {
-//					log.info("got repo: projectName: {}, id: {}, is private: {}", repo.getProjectName(), repo.getId(), repo.repoIsPrivate());
+//					log.info("got repo: name: {}, id: {}, is private: {}", repo.getProjectName(), repo.getId(), repo.repoIsPrivate());
 //					if (!repo.repoIsPrivate()) {
 //						log.info("getting commit for repo: {}", repo.getProjectName());
 //						var commits = githubRestClient.getUserRepoCommits("amfritz", repo.getProjectName());

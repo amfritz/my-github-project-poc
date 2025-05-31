@@ -1,9 +1,0 @@
-<h3>Select a repository to view messages and confirm to watch it</h3>
-@if (gitRepos !== undefined) {
-    @for(repo of gitRepos; track repo.id ) {
-        <p><a [routerLink]="['/repo', repo.name]" [queryParams]="{repo: makeJson(repo)}" >{{repo.name }}</a> is private: {{ repo.isPrivate ? 'true' : 'false' }} </p>
-    }
-}
-@else {
-    <p>uh oh, we didn't find any repositiories.</p>
-}

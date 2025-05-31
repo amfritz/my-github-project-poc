@@ -1,7 +1,0 @@
-@if (commits !== undefined) {
-    @for(commit of commits; track commit.node_id ) {
-        <p>commit message: {{commit.message }} from {{ commit.date }} by {{ commit.author_name }} </p>
-    }
-
-    <button (click)="watchRepo()">Watch this repository</button>
-} 

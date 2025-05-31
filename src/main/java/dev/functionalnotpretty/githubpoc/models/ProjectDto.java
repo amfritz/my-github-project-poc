@@ -6,7 +6,7 @@ import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
 public record ProjectDto(
         String id,
         String userId,
-        String projectName,
+        String name,
         String description,
         ProjectRepo repo,
         String createdAt,

@@ -38,7 +38,7 @@ public class ProjectEntity {
     public ProjectEntity(ProjectDto project) {
         this.id = project.id();
         this.userId = project.userId();
-        this.projectName = project.projectName();
+        this.projectName = project.name();
         this.description = project.description();
         this.repo = project.repo();     // i wonder if this is correct
         this.createdAt = project.createdAt();
