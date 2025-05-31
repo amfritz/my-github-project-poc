@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { GithubRepoService } from '../../services/github-repo.service';
 import { GitHubRepo } from '../../models/git-hub-repo';
 import { CommitSelectComponent } from "../commit-select/commit-select.component";
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-repo-select',
@@ -20,6 +20,11 @@ export class RepoSelectComponent implements OnInit {
         next: (resp) => this.gitRepos = resp,
         error: (err) => console.log('error', err)
       });
+  }
+
+  makeJson(item: GitHubRepo)
+  {
+    return JSON.stringify(item);
   }
 
 }
