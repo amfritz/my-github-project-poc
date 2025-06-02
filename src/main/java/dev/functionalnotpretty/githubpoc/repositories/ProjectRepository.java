@@ -11,4 +11,7 @@ import java.util.List;
 public interface ProjectRepository extends CosmosRepository<ProjectEntity, String> {
     @Query(value = "SELECT * from c where c.userId = @userId and c.type='project'")
     List<ProjectEntity> getProjectsByUserId(String userId);
+
+    @Query(value = "SELECT * from c where c.id = @id and c.type='project'")
+    ProjectEntity getProjectById(String id);
 }

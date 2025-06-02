@@ -1,3 +1,7 @@
 <h1>View Project</h1>
 <p>{{ project?.name }}</p>
 <p>Description: {{ project?.description }} </p>
+<p>Created at: {{ project?.createdAt | date:'short' }}</p>
+<p>Repository: <a [href]="project?.repo?.url" target="_blank">{{ project?.repo?.name }}</a></p> 
+
+<p>view the events</p>

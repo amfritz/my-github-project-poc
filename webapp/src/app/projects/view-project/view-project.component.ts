@@ -1,10 +1,11 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { ProjectEntity } from '../../models/project';
 import { ProjectsService } from '../../services/projects.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-project',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './view-project.component.html',
   styleUrl: './view-project.component.css'
 })
