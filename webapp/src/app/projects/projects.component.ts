@@ -12,11 +12,11 @@ import { CommitSelectComponent } from "./commit-list/commit-list.component";
 })
 export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectsService);
-  projects: ProjectEntity[]|undefined = undefined;
+  projects: ProjectEntity[] = [];
   selectedRepoName ='';
 
   ngOnInit(): void {
-      if (this.projects == undefined) {
+      if (this.projects.length === 0) {
         this.projectService.getProjects().subscribe({
           next: (resp) => this.projects = resp,
           error: (err) => console.log("error ", err)

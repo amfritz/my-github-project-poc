@@ -25,6 +25,8 @@ public class ProjectEvents {
     private String branch_name;
     private boolean isNewEvent;
 
+    private final static String EVENT_TYPE = "event";
+
     public ProjectEvents() {
     }
 

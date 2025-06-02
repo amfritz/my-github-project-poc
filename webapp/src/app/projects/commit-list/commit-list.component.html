@@ -1,3 +1,4 @@
+<h2>Commit Messages</h2>
 @if (commits !== undefined) {
     @for(commit of commits(); track commit.node_id ) {
         <p>commit message: {{commit.commit.message }} from {{ commit.commit.author.date }} by {{ commit.commit.author.name }} </p>

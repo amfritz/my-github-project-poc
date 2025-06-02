@@ -1,15 +1,72 @@
 <h3>Select a repository to create a project from it</h3>
+<div class="repo-list">
+     <h2>avaialable repositiories</h2>
 @if (gitRepos !== undefined) {
     <ul>
     @for(repo of gitRepos; track repo.id ) {
-        <li (click)="showCommits(repo)">{{repo.name }}, {{ repo.description }}, it is private: {{ repo.isPrivate ? 'true' : 'false' }} </li>
+        <li [id]="repo.name" (click)="selectRepo(repo)" class="repo-item" [class.selected]="selectedRepo?.name===repo.name">{{repo.name }}, {{ repo.description }}, it is private: {{ repo.isPrivate ? 'true' : 'false' }} </li>
     }
     </ul>
-
-    <button (click)="createProject()">create a project</button>
 }
+@else {
+    <p>No repositiories avaialable, create a new project.</p>
+}
+  
+  <div class="project-form">
+    <div>
+        <label for="projectName">Project name:</label>
+        <input type="text" id="projectName" placeholder="Enter project name" [(ngModel)]="newProject.name" />
+    </div>
+    <div>
+        <label for="projectDescription">Project description:</label>
+        <textarea cols="75" row="15" id="projectDescription" placeholder="Enter project description"  [(ngModel)]="newProject.description"></textarea>
+    </div>
+    <div>
+        <input type="checkbox" id="chk-events" name="chk-events" value="events" checked="true" />
+        <label for="chk-events">Use commits messages to create inital proejct events</label>
+    </div>
+  </div>
+  
+  <p>
+    <!-- if no repos, then use a class to make the project button disabled -->
+        <button (click)="createProject()" [disabled]="selectedRepo === undefined">create a new project</button>
+        <button (click)="location.back()">Cancel</button>
+    </p>
+    </div> 
+ <div class="commit-list">
 @if (gitCommits !== undefined) {
     <app-commit-list [commits]="gitCommits" />
 }
+</div>
 
-<p>Or create a new project and repository at the same time.</p>
+<!-- todo for diffenent create options
+  <fieldset class="create-setting">
+        <legend>Choose how to create this project:</legend>
+        <div>
+            <input type="radio" id="newRepo" name="repo-option" value="existing" />
+            <label for="newRepo">Create a new repository with the project</label>
+       </div>
+       <div>
+            <input type="radio" id="existingRepo"  name="repo-option" value="newRepo" />
+            <label for="newRepoName">Crete project using selected repository</label>
+        </div>
+        <div>
+            <input type="radio" id="emptyRepo" name="repo-option" value="emptyRepo"/>
+            <label for="emptyRepo">Create a project without a repository</label>
+        </div>
+    </fieldset>
+    <div class="new-repo">
+        <label for="newRepoName">New repository name:</label>
+        <input type="text" id="newRepoName" placeholder="Enter new repository name" />
+        <label for="newRepoDescription">New repository description:</label>
+        <textarea cols="75" row="15" id="newRepoDescription" placeholder="Enter new repository description"></textarea>
+    <fieldset class="new-repo-options">
+        <legend>Choose how to create the repository for this project:</legend>
+        <div>
+            <input type="checkbox" id="chk-private" name="chk-private" value="private" />
+            <label for="chk=private">Private repository</label>
+            <input type="checkbox" id="chk-readme" name="chk-readme" value="new" />
+            <label for="chk=private">Create readme</label>
+        </div>
+    </fieldset>
+    </div> -->
