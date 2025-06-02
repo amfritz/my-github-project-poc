@@ -1,0 +1,47 @@
+li {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.repo-list {
+  display: inline-block;
+  width: 45%;
+vertical-align : top;
+    padding: 0;
+}
+
+
+
+.repo-item {
+  list-style-type: none;
+  margin: 0.5rem 0;
+}
+
+.commit-list {
+  display: inline-block;
+  width: 45%;
+  padding: 0;
+  vertical-align: top;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  padding: 0.35rem 1.25rem;
+  border-radius: 4px;
+  background-color: brown;
+  color: white;
+  margin: auto 0.5rem;
+}
+
+button:disabled {
+    background-color: chocolate;
+    color: darkgray;
+    cursor: not-allowed;
+}
+
+.selected {
+    font-weight:  bold;
+    list-style: disc;
+}

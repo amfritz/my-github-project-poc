@@ -1,6 +1,6 @@
 export interface ProjectEntity {
     id?: string;
-    user_id: string;
+    userId: string;
     name: string;
     description: string;
     repo: {
@@ -11,4 +11,19 @@ export interface ProjectEntity {
         createdAt?: string;
     }
     createdAt?: string;    
+}
+
+export function emptyProject(): ProjectEntity {
+    return {
+        userId: '',
+        name: '',
+        description: '',
+        repo: {
+            id: '',
+            name: '',
+            url: '',
+            isPrivate: false,
+            createdAt: undefined
+        }
+    };
 }

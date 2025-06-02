@@ -1,18 +1,16 @@
 package dev.functionalnotpretty.githubpoc.controllers;
 
 
-import com.azure.core.annotation.QueryParam;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEvents;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import dev.functionalnotpretty.githubpoc.models.ProjectDto;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectEventsRepository;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectRepository;
+import dev.functionalnotpretty.githubpoc.services.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -21,16 +19,19 @@ public class ProjectsController {
     private final static Logger log = LoggerFactory.getLogger(ProjectsController.class);
     private final ProjectRepository projectRepository;
     private final ProjectEventsRepository eventsRepository;
+    private final ProjectService projectService;
 
     public ProjectsController(ProjectRepository projectRepository,
-                              ProjectEventsRepository timelineMessagesRepository) {
+                              ProjectEventsRepository timelineMessagesRepository,
+                              ProjectService projectService) {
         this.projectRepository = projectRepository;
         this.eventsRepository = timelineMessagesRepository;
+        this.projectService = projectService;
     }
 
     @GetMapping
-    public List<ProjectDto> getWatchedRepos() {
-        log.info("getWatchedRepos in projects api");
+    public List<ProjectDto> getProjects() {
+        log.info("getProjects in projects api");
 
         var result = projectRepository.getProjectsByUserId("amfritz")
                 .stream()
@@ -43,12 +44,14 @@ public class ProjectsController {
     @PostMapping
     public ProjectEntity createProject(@RequestBody ProjectDto watchedRepo, @RequestParam(value = "add-commits", required = false) boolean addCommits) {
         // todo create a service to do business logic
-        var item = new ProjectEntity(watchedRepo);
-        var created = Instant.now().toString();
-        item.setCreatedAt(created);
-        item.setUpdatedAt(created);
-        log.info("addWatchedRepo in projects api {}", item);
-        return projectRepository.save(item);
+        log.info("createProject in projects controller");
+        return this.projectService.createProject(watchedRepo, addCommits);
+    }
+
+    @GetMapping("{projectId}")
+    public ProjectEntity getProjectById(@PathVariable("projectId") String projectId) {
+        log.info("getProject({}) in projects controller", projectId);
+        return this.projectRepository.getProjectById(projectId);
     }
 
     @GetMapping("{projectId}/events")
@@ -57,9 +60,9 @@ public class ProjectsController {
         return this.eventsRepository.findByUserIdAndId("amfritz", projectId);
     }
 
-    @PostMapping("{name}/events")
-    public List<ProjectEvents> addProjectMessages(@PathVariable String name, @RequestBody List<ProjectEvents> timelineMessages) {
-        log.info("add {} ProjectMessages in projects api for {}", timelineMessages.size(), name);
+    @PostMapping("{projectId}/events")
+    public List<ProjectEvents> addProjectMessages(@PathVariable String projectId, @RequestBody List<ProjectEvents> timelineMessages) {
+        log.info("add {} ProjectMessages in projects api for {}", timelineMessages.size(), projectId);
         // todo -- validate inputs
         var result = this.eventsRepository.saveAll(timelineMessages);
         return (List<ProjectEvents>) result;
