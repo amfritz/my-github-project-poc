@@ -6,7 +6,7 @@
     <ul>
      @for(project of projects; track project.id ) {
         <!-- <p><a [routerLink]="['/repo', repo.projectName]" >{{repo.projectName }}</a> is private: {{ repo.repoIsPrivate ? 'true' : 'false' }} </p> -->
-         <ul> <span class="ul-link">{{project.name }}</span>:  {{ project.description }} </ul>
+         <ul><a [routerLink]="['/project', project.id]"> <span class="ul-link">{{project.name }}</span></a>:  {{ project.description }} </ul>
     }
     </ul>
     <p> <a [routerLink]="'/create-project'">Create a project</a></p>

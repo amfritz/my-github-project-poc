@@ -16,13 +16,13 @@ export const routes: Routes = [
         title: 'Create New Project'
     },
     {
-        path: 'project/{projectId}',
+        path: 'project/:projectId',
         component: ViewProjectComponent,
         title: 'View Project'
-    },
-    {
-        path: 'repo/:repoName',
-        component: CommitSelectComponent,
-        title: 'Select repository to watch'
     }
+    // {
+    //     path: 'repo/:repoName',
+    //     component: CommitSelectComponent,
+    //     title: 'Select repository to watch'
+    // }
 ];

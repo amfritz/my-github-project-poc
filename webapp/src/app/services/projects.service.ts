@@ -39,6 +39,10 @@ export class ProjectsService {
         )
     }
 
+  getProjectById(projectId: string) {
+    return this.loadedProjects().find(p => p.id === projectId) || undefined;
+  }
+
   createProject(project: ProjectEntity, addCommits: boolean) {
     return this.httpClient.post<ProjectEntity>(`${this.baseUrl}?add-commits=${addCommits}`,project)
       .pipe(
