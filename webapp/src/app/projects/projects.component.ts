@@ -14,13 +14,24 @@ export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectsService);
   projects: ProjectEntity[] = [];
   selectedRepoName ='';
+  isLoading = false;
 
   ngOnInit(): void {
+    // todo -- need a isloading
       if (this.projects.length === 0) {
+        this.isLoading = true;
         this.projectService.getProjects().subscribe({
-          next: (resp) => this.projects = resp,
-          error: (err) => console.log("error ", err)
+          next: (resp) => {
+            this.projects = resp;
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.log("error ", err);
+            this.isLoading = false;
+          }
         })
+      } else {
+        this.projects = this.projectService.loadedProjects();
       }
   }
 

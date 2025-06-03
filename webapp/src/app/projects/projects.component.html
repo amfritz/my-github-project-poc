@@ -1,5 +1,11 @@
     <h3>Project List</h3>
-@if (projects == undefined || projects.length==0) {
+    @if (isLoading) {
+       <div class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading repositories...</p>
+    </div>
+    }
+@else if (projects.length==0) {
     <p>You don't have any project. Do you want to <a [routerLink]="'/create-project'"> create one from </a>a repository?</p>
 }
 @else {

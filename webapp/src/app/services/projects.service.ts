@@ -9,7 +9,7 @@ import { ProjectEvents } from '../models/project-events';
   providedIn: 'root'
 })
 export class ProjectsService {
-  private baseUrl = '/api/v1/projects';
+  private baseUrl = '/api/projects';
   private httpClient = inject(HttpClient);
   private error = inject(ErrorService);
 
@@ -39,6 +39,8 @@ export class ProjectsService {
         )
     }
 
+  // TODO -- this doesn't work if someone deeplinks to a project
+  // so fix this service so it can handle that
   getProjectById(projectId: string) {
     return this.loadedProjects().find(p => p.id === projectId) || undefined;
   }

@@ -1,26 +1,25 @@
 package dev.functionalnotpretty.githubpoc.entities;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
-import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.functionalnotpretty.githubpoc.models.ProjectDto;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 @Setter
 @Getter
 @Container(containerName = "projects", autoCreateContainer = false)
 public class ProjectEntity {
     // key / primary elements
-    @Id
-    @GeneratedValue
-    private String id;      // system generated. project id
-    private final String type = "project";      // private to entity
+    private String id;      //  project id
     @PartitionKey
+    private String projectId;       // copy of the id, cannot be system generated
     private String userId;
+
+    // this may not scale, in theory, and may need to add a trigger to create a user container for the user info and their
+    // created projects
 
     // rest of the payload
     private String projectName;
@@ -29,14 +28,12 @@ public class ProjectEntity {
     private String createdAt;
     private String updatedAt;
 
-    // todo -- i wonder if this will be written to the db. we don't want it written
-    public static final String PROJECT_TYPE = "project";
-
     public ProjectEntity() {
     }
 
     public ProjectEntity(ProjectDto project) {
         this.id = project.id();
+        this.projectId = project.id();
         this.userId = project.userId();
         this.projectName = project.name();
         this.description = project.description();

@@ -1,20 +1,22 @@
 package dev.functionalnotpretty.githubpoc.controllers;
 
 
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvents;
-import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import dev.functionalnotpretty.githubpoc.models.ProjectDto;
+import dev.functionalnotpretty.githubpoc.models.ProjectEventDto;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectEventsRepository;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectRepository;
 import dev.functionalnotpretty.githubpoc.services.ProjectService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("api/v1/projects")
+@RequestMapping("api/projects")
 public class ProjectsController {
     private final static Logger log = LoggerFactory.getLogger(ProjectsController.class);
     private final ProjectRepository projectRepository;
@@ -33,38 +35,50 @@ public class ProjectsController {
     public List<ProjectDto> getProjects() {
         log.info("getProjects in projects api");
 
-        var result = projectRepository.getProjectsByUserId("amfritz")
+        var result = this.projectRepository.findAllByUserId("amfritz")
                 .stream()
-                .map(ProjectDto::mapToDto)
+                .map(ProjectDto::toDto)
                 .toList();
-        log.info("read {} watched repos", result.size());
+        log.info("read {} projects", result.size());
         return result;
     }
 
     @PostMapping
-    public ProjectEntity createProject(@RequestBody ProjectDto watchedRepo, @RequestParam(value = "add-commits", required = false) boolean addCommits) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProjectDto createProject(@Valid @RequestBody ProjectDto project, @RequestParam(value = "add-commits", required = false) boolean addCommits) {
         // todo create a service to do business logic
         log.info("createProject in projects controller");
-        return this.projectService.createProject(watchedRepo, addCommits);
+        return ProjectDto.toDto(this.projectService.createProject(project, addCommits));
     }
 
+    // todo -- put and delete projects
+
     @GetMapping("{projectId}")
-    public ProjectEntity getProjectById(@PathVariable("projectId") String projectId) {
+    public ProjectDto getProjectById(@PathVariable("projectId") String projectId) {
         log.info("getProject({}) in projects controller", projectId);
-        return this.projectRepository.getProjectById(projectId);
+        return ProjectDto.toDto(this.projectService.getProject(projectId));
     }
 
     @GetMapping("{projectId}/events")
-    public List<ProjectEvents> getProjectEvents(@PathVariable String projectId) {
+    public List<ProjectEventDto> getProjectEvents(@PathVariable String projectId) {
         log.info("getProjectMessages in projects api {}", projectId);
-        return this.eventsRepository.findByUserIdAndId("amfritz", projectId);
+        return this.eventsRepository.findAllByProjectId(projectId)
+                .stream()
+                .map(ProjectEventDto::toDto)
+                .toList();
     }
 
+    // todo -- put and delete events
+
     @PostMapping("{projectId}/events")
-    public List<ProjectEvents> addProjectMessages(@PathVariable String projectId, @RequestBody List<ProjectEvents> timelineMessages) {
-        log.info("add {} ProjectMessages in projects api for {}", timelineMessages.size(), projectId);
-        // todo -- validate inputs
-        var result = this.eventsRepository.saveAll(timelineMessages);
-        return (List<ProjectEvents>) result;
+    public List<ProjectEventDto> addProjectMessages(@Valid @PathVariable String projectId, @RequestBody List<ProjectEventDto> events) {
+        log.info("add {} ProjectMessages in projects api for {}", events.size(), projectId);
+        var result = this.eventsRepository.saveAll(events.stream()
+                .map(ProjectEventDto::mapDto)
+                .toList()
+            );
+        return StreamSupport.stream(result.spliterator(), false)
+                .map(ProjectEventDto::toDto)
+                .toList();
     }
 }

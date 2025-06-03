@@ -9,7 +9,7 @@ import { GitHubRepo } from '../models/git-hub-repo';
   providedIn: 'root'
 })
 export class GithubRepoService {
-  private baseUrl = '/api/v1/repos';
+  private baseUrl = '/api/repos';
   private httpClient = inject(HttpClient);
   private error = inject(ErrorService);
 

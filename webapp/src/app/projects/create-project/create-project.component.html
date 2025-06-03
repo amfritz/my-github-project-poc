@@ -1,4 +1,8 @@
 <h3>Select a repository to create a project from it</h3>
+@if (isLoading) {
+    <p>Loading repositories...</p>
+} @else {
+
 <div class="repo-list">
      <h2>avaialable repositiories</h2>
 @if (gitRepos !== undefined) {
@@ -38,6 +42,7 @@
     <app-commit-list [commits]="gitCommits" />
 }
 </div>
+}
 
 <!-- todo for diffenent create options
   <fieldset class="create-setting">
