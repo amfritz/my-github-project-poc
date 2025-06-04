@@ -7,4 +7,6 @@ export interface ProjectEvents {
     repoName: string;
     branch_name: string;
     isNewEvent: boolean;
+    createdDt: string;
+    updatedDt: string;
 }

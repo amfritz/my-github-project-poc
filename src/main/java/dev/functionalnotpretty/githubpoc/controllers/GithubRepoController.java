@@ -28,7 +28,7 @@ public class GithubRepoController {
         // returning the 'raw' github object to the client. it's read only, client doesn't operate on gh data.
         var result = githubRestClient.getUserRepos();
         log.info("get {} repos", result.size());
-        // TODO -- handle errors & no content. this is POC.
+        //  handle errors & no content. this is POC.
         return result;
     }
 
