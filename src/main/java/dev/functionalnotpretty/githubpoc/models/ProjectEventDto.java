@@ -2,7 +2,6 @@ package dev.functionalnotpretty.githubpoc.models;
 
 import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
 import jakarta.validation.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public record ProjectEventDto(
         String id,
@@ -14,7 +13,6 @@ public record ProjectEventDto(
         @NotEmpty(message = "The event description cannot be empty")
         String eventDescription,
         @NotEmpty(message = "The event date cannot be empty")
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         String eventDate,
         String repoName,
         String branchName,
@@ -23,7 +21,7 @@ public record ProjectEventDto(
         String updatedDt
         ) {
 
-        public static ProjectEvent mapDto(ProjectEventDto dto) {
+        public static ProjectEvent toEvent(ProjectEventDto dto) {
                 return new ProjectEvent(dto);
         }
 

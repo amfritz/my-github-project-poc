@@ -11,7 +11,7 @@ import { ProjectEvents } from '../models/project-events';
 export class ProjectsService {
   private baseUrl = '/api/projects';
   private httpClient = inject(HttpClient);
-  private error = inject(ErrorService);
+  // private error = inject(ErrorService);
 
   private projects = signal<ProjectEntity[]>([]);
 
@@ -57,12 +57,12 @@ export class ProjectsService {
             () => new Error("error")
           );
         })
-      )          
+      )
   }
 
     getProjectEvents(projectId: string) {
       return this.httpClient
-        .get<ProjectEvents[]>(this.baseUrl)
+        .get<ProjectEvents[]>(`${this.baseUrl}/${projectId}/events`)
         .pipe(
           catchError((error) => {
             console.log(error);
@@ -72,5 +72,5 @@ export class ProjectsService {
           })
         )
     }
-  
+
 }

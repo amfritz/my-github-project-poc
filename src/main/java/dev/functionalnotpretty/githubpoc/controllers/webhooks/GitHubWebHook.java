@@ -13,6 +13,8 @@ public class GitHubWebHook {
     @PostMapping
     public ResponseEntity<String> doGitHubWebhook(@RequestBody String body) {
         // todo -- all of this
+        // register a webhook that will parse out commit messages and add them to the project
+        // maybe have a way to cache project ids and not query them
         return ResponseEntity.ok("Hello World, and " + body);
     }
 }

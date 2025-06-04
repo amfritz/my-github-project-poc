@@ -4,7 +4,6 @@ import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.functionalnotpretty.githubpoc.models.ProjectDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,31 +24,13 @@ public class ProjectEntity {
     private String projectName;
     private String description;
     private ProjectRepo repo;
+    // todo -- consider the spring annotations for auditing, but seems must be date objects and not strings
     private String createdAt;
     private String updatedAt;
 
     public ProjectEntity() {
     }
 
-    public ProjectEntity(ProjectDto project) {
-        this.id = project.id();
-        this.projectId = project.id();
-        this.userId = project.userId();
-        this.projectName = project.name();
-        this.description = project.description();
-        this.repo = project.repo();     // i wonder if this is correct
-        this.createdAt = project.createdAt();
-        this.updatedAt = project.updatedAt();
-    }
-
-    public ProjectEntity(String userId, String projectName, String description, String repoName, String repoId, String repoUrl, boolean repoIsPrivate, String repoCreateDt, String createdAt, String updatedAt) {
-        this.userId = userId;
-        this.projectName = projectName;
-        this.description = description;
-        this.repo = new ProjectRepo(repoId, repoName, repoUrl, repoIsPrivate,repoCreateDt);
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     @Override
     public String toString() {

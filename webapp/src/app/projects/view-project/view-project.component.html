@@ -4,4 +4,5 @@
 <p>Created at: {{ project?.createdAt | date:'short' }}</p>
 <p>Repository: <a [href]="project?.repo?.url" target="_blank">{{ project?.repo?.name }}</a></p> 
 
-<p>view the events</p>
+ <app-view-project-events [projectId]="projectId()" />
+

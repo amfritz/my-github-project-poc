@@ -1,0 +1,17 @@
+<h3>Project events</h3>
+<div class="event-list">
+  @if (isLoading) {
+    <p>Loading events...</p>
+  } @else if (projectEvents.length === 0) {
+    <p>No events found for this project.</p>
+  } @else {
+    <ul>
+      @for (event of projectEvents; track event.id) {
+        <li>
+          {{ event.eventDescription }}
+          <span class="event-date">{{ event.eventDate| date:'short' }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>

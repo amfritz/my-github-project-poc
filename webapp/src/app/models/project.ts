@@ -1,5 +1,6 @@
 export interface ProjectEntity {
     id?: string;
+    projectId?: string; 
     userId: string;
     name: string;
     description: string;
@@ -10,7 +11,8 @@ export interface ProjectEntity {
         isPrivate: boolean;
         createdAt?: string;
     }
-    createdAt?: string;    
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export function emptyProject(): ProjectEntity {
