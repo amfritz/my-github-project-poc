@@ -1,0 +1,61 @@
+.event-item {
+    border-radius: 0.4rem;
+    margin: 0.4rem;
+    padding: 0.4rem;
+    background: chocolate;
+    color: white;
+    width: 90%;
+    flex: 1 1 auto;
+        /* copilot entry */
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    gap: 10px;
+}
+
+.new-event {
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px #ccc;
+    background: brown;
+}
+
+.event-text {
+    margin: 0.4rem auto;
+    background: bisque;
+    font-family: inherit;
+    width: 80%;
+    /* copilot entry */
+    /*height: 100px;*/
+}
+
+.event-actions {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+.event-date {
+    padding-right: 0.5rem;
+    margin-top: auto; /* Push date to bottom */
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    border: none;
+    padding: 0.35rem 1.25rem;
+    border-radius: 4px;
+    background-color: brown;
+    color: white;
+    margin: auto 0.5rem;
+}
+
+textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 0.9rem;
+    color: #4f4b53;
+
+}

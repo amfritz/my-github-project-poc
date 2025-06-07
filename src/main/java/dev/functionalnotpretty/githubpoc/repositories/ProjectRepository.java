@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends CosmosRepository<ProjectEntity, String> {
     List<ProjectEntity> findAllByUserId(String userId);
+    boolean existsByProjectId(String projectId);
 }

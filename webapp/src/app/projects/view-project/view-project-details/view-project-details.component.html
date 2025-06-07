@@ -1,0 +1,5 @@
+<p><strong>Name:</strong> {{ project().name }}</p>
+<p><strong>Description:</strong> {{ project().description }} </p>
+<p><strong>Project created:</strong> {{ project().createdAt | date:'short' }}</p>
+<p>Repository: <a [href]="project().repo.url" target="_blank">{{ project().repo.name }}</a></p>
+
