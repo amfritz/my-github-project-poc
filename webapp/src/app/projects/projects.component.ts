@@ -17,7 +17,7 @@ export class ProjectsComponent implements OnInit {
   isLoading = false;
 
   ngOnInit(): void {
-    // todo -- need a isloading
+      this.projects = this.projectService.loadedProjects();
       if (this.projects.length === 0) {
         this.isLoading = true;
         this.projectService.getProjects().subscribe({
@@ -30,8 +30,6 @@ export class ProjectsComponent implements OnInit {
             this.isLoading = false;
           }
         })
-      } else {
-        this.projects = this.projectService.loadedProjects();
       }
   }
 

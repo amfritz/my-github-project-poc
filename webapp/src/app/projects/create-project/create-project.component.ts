@@ -1,12 +1,13 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { GithubRepoService } from '../../services/github-repo.service';
 import { GitHubRepo } from '../../models/git-hub-repo';
 import { CommitSelectComponent } from "../commit-list/commit-list.component";
 import { GitHubCommit } from '../../models/git-hub-commit';
-import { ProjectEntity, emptyProject } from '../../models/project';
+import { emptyProject } from '../../models/project';
 import { ProjectsService } from '../../services/projects.service';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-project',
@@ -24,20 +25,21 @@ export class CreateProjectComponent implements OnInit {
   location = inject(Location);
   newProject = emptyProject();
   isLoading = false;
+  router = inject(Router);
 
- 
+
   ngOnInit(): void
   {
     console.log('create-project component init: ');
     console.dir(this.projectService.loadedProjects());
-    // todo -- need a pretty isloading 
+    // todo -- need a pretty isloading
     this.isLoading = true;
     this.githubService.getUserRepos().subscribe({
         next: (resp) => {
           this.loadRepos(resp);
           this.isLoading = false;
         },
-        error: (err) => { 
+        error: (err) => {
           console.log('error', err);
           this.isLoading = false;
         }
@@ -57,20 +59,20 @@ export class CreateProjectComponent implements OnInit {
       this.newProject = emptyProject();
       return;
     }
- 
-    // set the selelcted class on the elemetn
+
+    // set the selected class on the element
     this.selectedRepo = repo;
 
     this.newProject.name = repo.name;
     this.newProject.repo.id = repo.id;
-    this.newProject.repo.name = repo.name; 
+    this.newProject.repo.name = repo.name;
     this.newProject.repo.url = repo.html_url;
     this.newProject.repo.isPrivate = repo.isPrivate || false;
     this.newProject.repo.url = repo.html_url;
     this.newProject.userId = 'amfritz'; // todo -- get this from auth service
     this.newProject.description = repo.description;
 
-    // assumption is that commits won't occure while working here, so save api results
+    // the assumption is that commits won't occur while working here, so save api results
     if (this.selectedRepo.commits === undefined) {
       this.githubService.getRepoCommits(repo.name).subscribe({
               next: (resp) => {
@@ -83,13 +85,13 @@ export class CreateProjectComponent implements OnInit {
     } else {
       this.gitCommits = this.selectedRepo.commits;
     }
-   
+
   }
 
   createProject () {
     // todo -- on success, navigate to new project
     this.projectService.createProject(this.newProject, true).subscribe( {
-      next: (resp) => this.location.back(),
+      next: (resp) => this.router.navigate(['/project', resp.projectId]),
       error: (err ) => console.log(err),
           })
   }

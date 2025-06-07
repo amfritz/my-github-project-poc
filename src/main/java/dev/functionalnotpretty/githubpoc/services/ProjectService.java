@@ -103,7 +103,7 @@ public class ProjectService {
     }
 
     public ProjectEntity updateProject(ProjectEntity projectEntity) {
-        if (!projectRepository.existsById(projectEntity.getProjectId())) {
+        if (!projectRepository.existsByProjectId(projectEntity.getProjectId())) {
             throw new ResourceNotFoundException("Project not found");
         }
 
@@ -125,8 +125,8 @@ public class ProjectService {
     }
 
     public ProjectEvent updateProjectEvent(ProjectEvent projectEvent) {
-        if (!projectRepository.existsById(projectEvent.getId())) {
-            log.info( "project event is not found");
+        if (!projectRepository.existsByProjectId(projectEvent.getProjectId())) {
+            log.info( "project event {} is not found", projectEvent.getId());
             throw new ResourceNotFoundException("Project event not found");
         }
         projectEvent.setUpdatedDt(Instant.now().toString());
@@ -134,6 +134,8 @@ public class ProjectService {
     }
 
     public ProjectEvent createProjectEvent(ProjectEvent projectEvent) {
+        // ensure the db will generate an id
+        projectEvent.setId(null);
         var created = Instant.now().toString();
         projectEvent.setCreatedDt(created);
         projectEvent.setUpdatedDt(created);

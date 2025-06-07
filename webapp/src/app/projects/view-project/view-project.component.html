@@ -1,8 +1,14 @@
-<h1>View Project</h1>
-<p>{{ project?.name }}</p>
-<p>Description: {{ project?.description }} </p>
-<p>Created at: {{ project?.createdAt | date:'short' }}</p>
-<p>Repository: <a [href]="project?.repo?.url" target="_blank">{{ project?.repo?.name }}</a></p> 
+<h1>Project Details</h1>
+<p><a [routerLink]="'/'">back to project list</a></p>
+@if (project !== null) {
+    <app-view-project-details [project]="project" />
+}
 
- <app-view-project-events [projectId]="projectId()" />
-
+<div class="event-list">
+    <h3>Development log</h3>
+    <div><button [disabled]="!canAdd()" (click)="onAdd()">Add new event</button></div>
+    <div (click)="changeSort()">sort: {{ sort() }}</div>
+@for (event of sortedEvents(); track event.id) {
+    <app-view-project-event [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
+}
+</div>

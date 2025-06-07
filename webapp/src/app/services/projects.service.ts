@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ErrorService } from './error.service';
-import { HttpClient } from '@angular/common/http';
-import { catchError, tap, throwError } from 'rxjs';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {catchError, Observable, tap, throwError} from 'rxjs';
 import { ProjectEntity } from '../models/project';
 import { ProjectEvents } from '../models/project-events';
 
@@ -14,7 +14,6 @@ export class ProjectsService {
   // private error = inject(ErrorService);
 
   private projects = signal<ProjectEntity[]>([]);
-
   loadedProjects = this.projects.asReadonly();
 
   constructor() { }
@@ -39,10 +38,20 @@ export class ProjectsService {
         )
     }
 
-  // TODO -- this doesn't work if someone deeplinks to a project
+    findProjectById(projectId: string) {
+      return this.loadedProjects().find(p => p.id === projectId);
+    }
   // so fix this service so it can handle that
   getProjectById(projectId: string) {
-    return this.loadedProjects().find(p => p.id === projectId) || undefined;
+      return this.httpClient.get<ProjectEntity>(`${this.baseUrl}/${projectId}`)
+          .pipe(
+              catchError((error) => {
+              console.log(error);
+              return throwError(
+                () => new Error("get project by id error")
+              );
+              })
+          )
   }
 
   createProject(project: ProjectEntity, addCommits: boolean) {
@@ -63,6 +72,41 @@ export class ProjectsService {
     getProjectEvents(projectId: string) {
       return this.httpClient
         .get<ProjectEvents[]>(`${this.baseUrl}/${projectId}/events`)
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            return throwError(
+              () => new Error("error")
+            );
+          })
+        )
+    }
+    createProjectEvent(event: ProjectEvents) {
+      return this.httpClient.post<ProjectEvents>(`${this.baseUrl}/${event.projectId}/events`, event)
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            return throwError(
+              () => new Error("error")
+            );
+          })
+        )
+    }
+
+    updateProjectEvent( event: ProjectEvents) {
+      return this.httpClient.put<ProjectEvents>(`${this.baseUrl}/${event.projectId}/events/${event.id}`, event)
+        .pipe(
+          catchError((error) => {
+            console.log(error);
+            return throwError(
+              () => new Error("error")
+            );
+          })
+        )
+    }
+
+    deleteProjectEvent(projectId: string, eventId: string) {
+      return this.httpClient.delete(`${this.baseUrl}/${projectId}/events/${eventId}`)
         .pipe(
           catchError((error) => {
             console.log(error);
