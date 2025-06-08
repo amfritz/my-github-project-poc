@@ -5,6 +5,7 @@ public record ProjectRepo(
         String name,
         String url,
         boolean isPrivate,
-        String createdAt
+        String createdAt,
+        String hookId
 ) {
 }

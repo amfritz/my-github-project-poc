@@ -2,6 +2,7 @@ package dev.functionalnotpretty.githubpoc.services;
 
 import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
+import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
@@ -65,6 +66,14 @@ public class ProjectService {
             throw new BadRequestException("No repository specified to get commits from.");
         }
 
+        // create the webhook subscription now.
+        var resp = this.githubRestClient.createGitHubRepositoryWebHook(projectEntity.getUserId(), projectEntity.getRepo().name());
+        log.info("created webhook response {} ", resp);
+        //projectEntity.getRepo().
+        ProjectRepo newRepo = new ProjectRepo(projectEntity.getRepo().id(), projectEntity.getRepo().name(), projectEntity.getRepo().url(),
+                projectEntity.getRepo().isPrivate(), projectEntity.getRepo().createdAt(), Long.toString(resp.id()));
+        projectEntity.setRepo(newRepo);
+
         var items = createCommits(projectEntity.getProjectId(), projectEntity.getUserId(), projectEntity.getRepo().name());
         var result = projectRepository.save(projectEntity);
         // cosmos doesn't have cross container transactions, so if a write fails here not much to do about it now
@@ -114,8 +123,13 @@ public class ProjectService {
     }
 
     public void deleteProject(String projectId) {
-        if (!projectRepository.existsById(projectId)) {
-            throw new ResourceNotFoundException("Project not found");
+        var project = this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+
+        // delete webhook
+        // project.getRepo().name();
+        var result = this.githubRestClient.deleteGitHubWebhook(project.getUserId(), project.getRepo().name(), project.getRepo().hookId() );
+        if (!result) {
+            log.info("delete webhook for project {} failed", projectId);
         }
         this.projectRepository.deleteById(projectId);
     }
