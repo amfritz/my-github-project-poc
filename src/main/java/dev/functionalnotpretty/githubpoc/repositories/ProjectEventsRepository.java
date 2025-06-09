@@ -10,4 +10,5 @@ public interface ProjectEventsRepository extends CosmosRepository<ProjectEvent, 
 
     boolean existsByProjectIdAndId(String projectId, String id);
     void deleteByProjectIdAndId(String projectId, String id);
+    void deleteByProjectId(String projectId);
 }

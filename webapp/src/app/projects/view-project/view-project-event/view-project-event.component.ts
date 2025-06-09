@@ -12,6 +12,7 @@ import {ProjectEvents} from '../../../models/project-events';
 })
 export class ViewProjectEventComponent {
     event = input.required<ProjectEvents>();
+    canDelete = input<boolean>(true);
     delete = output();
     value = output<string>();
     visited = output();

@@ -14,4 +14,7 @@ public interface ProjectRepository extends CosmosRepository<ProjectEntity, Strin
     boolean existsByProjectId(String projectId);
 
     ProjectEntity findByRepo_Name(String repoName);
+
+    boolean existsByRepo_Name(String repoName);
+    ProjectEntity findByIdAndProjectId(String id, String projectId);
 }

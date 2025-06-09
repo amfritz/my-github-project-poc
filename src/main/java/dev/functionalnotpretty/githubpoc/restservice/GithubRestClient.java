@@ -1,13 +1,21 @@
 package dev.functionalnotpretty.githubpoc.restservice;
 
 import dev.functionalnotpretty.githubpoc.entities.*;
+import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -24,6 +32,16 @@ public class GithubRestClient {
                 .defaultHeader("Accept", "application/vnd.github+json")
                 .defaultHeader("User-Agent", "amfritz")
                 .defaultHeader("X-GitHub-Api-Version", "2022-11-28")
+//                .defaultStatusHandler(HttpStatusCode::isError,  (req, resp) -> {
+//                    log.error("default github error handler, returned HTTP error code {} : {}",resp.getStatusCode(),resp.getBody());
+//                    throw new RuntimeException("a github error has occurred: " + resp.getStatusCode());
+//                })
+//                .requestInterceptor((request, body, execution) -> {
+//                    logRequest(request, body);
+//                    var response = execution.execute(request, body);
+//                    logResponse(request, response);
+//                    return response;
+//                })
                 .build();
     }
 
@@ -55,28 +73,45 @@ public class GithubRestClient {
                 .uri("/repos/{userId}/{repository}/hooks", userId, repository)
                 .body(request)
                 .exchange( (req, resp) -> {
-                    if (resp.getStatusCode().is4xxClientError() || resp.getStatusCode().is5xxServerError()) {
-                        log.error("createGitHubRepositoryWebHook returned HTTP error code {} : {}",resp.getStatusCode(), resp);
-                        // todo -- handle errors better
-                        throw new RuntimeException("createGitHubRepositoryWebHook returned HTTP error code " + resp.getStatusCode());
-                    } else {
-                        return resp.bodyTo(GitHubCreateWebhookResponse.class);
+                    if (resp.getStatusCode().isError()) {
+                        var body = new String(resp.getBody().readAllBytes());
+                        log.error("createGitHubRepositoryWebHook client error response {} ", body);
+                        throw new GitRequestException("createGitHubRepositoryWebHook response " + body, resp.getStatusCode().value());
                     }
+                    return resp.bodyTo(GitHubCreateWebhookResponse.class);
                 });
     }
 
-    public boolean deleteGitHubWebhook(String userId, String repository, String webhookId) {
-        log.info("GitHubDeleteWebhook called");
-        var response = this.githubRestClient.delete()
-                .uri("/repos/{userid}/{repository}/hooks/{webhookId}", userId, repository, webhookId)
-                .retrieve()
-                .toBodilessEntity();
-
-        if (response.getStatusCode().is4xxClientError() || response.getStatusCode().is5xxServerError()) {
-            log.error("unable to delete webhook, returned HTTP error code {} : {}",response.getStatusCode(), response);
-            return false;
-        }
-        return true;
+    public void deleteGitHubWebhook(String userId, String repository, String webhookId) {
+            log.info("GitHubDeleteWebhook called");
+            this.githubRestClient.delete()
+                    .uri("/repos/{userid}/{repository}/hooks/{webhookId}", userId, repository, webhookId)
+                    .retrieve()
+                    .toBodilessEntity();
     }
+
+//    private void logRequest(HttpRequest request, byte[] body) {
+//        log.info("Request: {} {}", request.getMethod(), request.getURI());
+//        //logHeaders(request.getHeaders());
+//        for(var header : request.getHeaders().entrySet()) {
+//            log.info("Response header: {} {}", header.getKey(), header.getValue());
+//        }
+//        if (body != null && body.length > 0) {
+//            log.info("Request body: {}", new String(body, StandardCharsets.UTF_8));
+//        }
+//    }
+//
+//    private void logResponse(HttpRequest request, ClientHttpResponse response) throws IOException {
+//        log.info("Response status: {}", response.getStatusCode());
+//        //logHeaders(response.getHeaders());
+//        for(var header : response.getHeaders().entrySet()) {
+//            log.info("Response header: {} {}", header.getKey(), header.getValue());
+//        }
+//        byte[] responseBody = response.getBody().readAllBytes();
+//        if (responseBody.length > 0) {
+//            log.info("Response body: {}", new String(responseBody, StandardCharsets.UTF_8));
+//        }
+//    }
+
 }
 

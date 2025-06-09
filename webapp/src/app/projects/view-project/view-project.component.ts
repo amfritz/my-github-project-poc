@@ -17,7 +17,10 @@ export class ViewProjectComponent implements OnInit {
   private projectService = inject(ProjectsService);
   project :ProjectEntity| null =null;
   events = signal<ProjectEvents[]>([]);
-  canAdd = computed(() => this.events().findIndex(e => e.id === '') === -1);
+  canAdd = computed(() => {
+      return ((this.project?.status == 'active') &&
+            (this.events().findIndex(e => e.id === '') === -1));
+  });
   sort = signal<string>('asc');
   sortedEvents = computed(() => {
       let sort = this.sort();
@@ -67,6 +70,20 @@ export class ViewProjectComponent implements OnInit {
       }
       this.projectService.deleteProjectEvent(event.projectId, event.id).subscribe( {
           next: () => this.events.update( val => val.filter(e => e.id !== event.id)),
+          error: (err) => console.log('error', err)
+      });
+  }
+
+  archiveProject() {
+      if (this.project === null) {
+          return;
+      }
+      let req = {...this.project};
+      req.status = 'archived';
+      this.projectService.updateProject(req).subscribe( {
+          next: (resp) => {
+              this.project = resp;
+          },
           error: (err) => console.log('error', err)
       });
   }

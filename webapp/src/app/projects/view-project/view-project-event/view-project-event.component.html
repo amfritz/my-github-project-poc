@@ -1,7 +1,7 @@
 <div class="event-item" [class.new-event]="event().isNewEvent" (mouseenter)="onMouseEnter()">
     <textarea rows="4" class="event-text" (change)="eventChange($event)" >{{ event().eventDescription }}</textarea>
     <div class="event-actions">
-        <button (click)="delete.emit()">delete</button>
+        <button [disabled]="!canDelete()" (click)="delete.emit()">delete</button>
     </div>
     <div class="event-date">{{ event().eventDate|  date:'short' }}</div>
 </div>

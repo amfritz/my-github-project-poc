@@ -2,6 +2,13 @@
 <p><a [routerLink]="'/'">back to project list</a></p>
 @if (project !== null) {
     <app-view-project-details [project]="project" />
+    @if (project.status === 'active') {
+    <div><button (click)="archiveProject()">Archive project</button></div>
+    }
+    @else {
+        <p>project is archived and cannot be edited</p>
+    }
+    <div><button>delete project</button></div>
 }
 
 <div class="event-list">
@@ -9,6 +16,6 @@
     <div><button [disabled]="!canAdd()" (click)="onAdd()">Add new event</button></div>
     <div (click)="changeSort()">sort: {{ sort() }}</div>
 @for (event of sortedEvents(); track event.id) {
-    <app-view-project-event [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
+    <app-view-project-event [canDelete]="project?.status == 'active'" [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
 }
 </div>

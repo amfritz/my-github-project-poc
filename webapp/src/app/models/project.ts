@@ -1,9 +1,11 @@
+
 export interface ProjectEntity {
     id?: string;
-    projectId?: string; 
+    projectId?: string;
     userId: string;
     name: string;
     description: string;
+    status: 'archived' | 'active' | '';
     repo: {
         id: string;
         name: string;
@@ -20,6 +22,7 @@ export function emptyProject(): ProjectEntity {
         userId: '',
         name: '',
         description: '',
+        status: '',
         repo: {
             id: '',
             name: '',
