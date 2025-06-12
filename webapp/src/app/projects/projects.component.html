@@ -1,4 +1,4 @@
-    <h3>Project List</h3>
+    <h3>Project List:</h3>
     @if (isLoading) {
        <div class="spinner-container">
         <div class="spinner"></div>
@@ -9,11 +9,14 @@
     <p>You don't have any project. Do you want to <a [routerLink]="'/create-project'"> create one from </a>a repository?</p>
 }
 @else {
-    <ul>
+    <div class="project-list">
      @for(project of projects; track project.id ) {
         <!-- <p><a [routerLink]="['/repo', repo.projectName]" >{{repo.projectName }}</a> is private: {{ repo.repoIsPrivate ? 'true' : 'false' }} </p> -->
-         <ul><a [routerLink]="['/project', project.id]"> <span class="ul-link">{{project.name }}</span></a>:  {{ project.description }} </ul>
+         <div class="project-item">
+         <div><a class="link" [routerLink]="['/project', project.id]">{{project.name }}</a> </div>
+          <div>{{ project.description }} <span class="archive" [class.show]="project.status=='archived'">(archived project)</span></div>
+        </div>
     }
-    </ul>
-    <p> <a [routerLink]="'/create-project'">Create a project</a></p>
+    </div>
+    <div class="new-project"><a class="link" [routerLink]="'/create-project'">Create a new project</a></div>
 }

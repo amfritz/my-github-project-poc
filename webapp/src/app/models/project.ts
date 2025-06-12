@@ -11,6 +11,8 @@ export interface ProjectEntity {
         name: string;
         url: string;
         isPrivate: boolean;
+        hookId?: string;
+        hookUrl?: string;
         createdAt?: string;
     }
     createdAt?: string;
@@ -27,6 +29,7 @@ export function emptyProject(): ProjectEntity {
             id: '',
             name: '',
             url: '',
+            hookId: '',
             isPrivate: false,
             createdAt: undefined
         }

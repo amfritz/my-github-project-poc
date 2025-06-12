@@ -1,4 +1,4 @@
-import {Component, input, output} from '@angular/core';
+import {Component, input, model, output} from '@angular/core';
 import {DatePipe} from "@angular/common";
 import {ProjectEvents} from '../../../models/project-events';
 
@@ -17,18 +17,20 @@ export class ViewProjectEventComponent {
     value = output<string>();
     visited = output();
 
-    eventChange(event: Event) {
-        const target = event.target as HTMLTextAreaElement;
-        if (target.value === '') {
-            this.delete.emit();
-            return;
-        }
-        this.value.emit(target.value);
-    }
-
     onMouseEnter() {
         if (this.event().isNewEvent) {
             this.visited.emit();
+        }
+    }
+
+    editDescription() {
+        let val = window.prompt('Enter a description', this.event().eventDescription);
+        if (val!= null) {
+            if (val === '' && this.canDelete()) {
+                this.delete.emit();
+            } else if (val !== this.event().eventDescription) {
+                this.value.emit(val);
+            }
         }
     }
 
