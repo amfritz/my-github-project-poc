@@ -2,6 +2,7 @@ package dev.functionalnotpretty.githubpoc.models;
 
 import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
+import dev.functionalnotpretty.githubpoc.entities.ProjectStatus;
 import jakarta.validation.constraints.NotEmpty;
 
 public record ProjectDto(
@@ -11,6 +12,7 @@ public record ProjectDto(
         @NotEmpty(message = "The project name cannot be empty")
         String name,
         String description,
+        ProjectStatus status,
         ProjectRepo repo,
         String createdAt,
         String updatedAt
@@ -23,6 +25,7 @@ public record ProjectDto(
                 p.getUserId(),
                 p.getProjectName(),
                 p.getDescription(),
+                p.getStatus(),
                 p.getRepo(),
                 p.getCreatedAt(),
                 p.getUpdatedAt()
@@ -36,6 +39,7 @@ public record ProjectDto(
         entity.setUserId(dto.userId);
         entity.setProjectName(dto.name);
         entity.setDescription(dto.description);
+        entity.setStatus(dto.status);
         entity.setRepo(dto.repo);
         entity.setCreatedAt(dto.createdAt);
         entity.setUpdatedAt(dto.updatedAt);

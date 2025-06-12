@@ -3,6 +3,7 @@ package dev.functionalnotpretty.githubpoc.services;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
 import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
+import dev.functionalnotpretty.githubpoc.entities.ProjectStatus;
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
@@ -40,9 +41,19 @@ public class ProjectService {
 
     public ProjectEntity getProject(String projectId) {
         return this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+//        return this.projectRepository.findByIdAndProjectId(projectId, projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
     }
 
     public ProjectEntity createProject(ProjectEntity projectEntity, boolean addCommits) {
+        if (this.projectRepository.existsByRepo_Name(projectEntity.getRepo().name())) {
+            log.info("Project with this repository already exists");
+            throw new BadRequestException("Project with this repository already exists");
+        }
+
+        if (projectEntity.getStatus() != ProjectStatus.ACTIVE ) {
+            log.info("Invalid project status");
+            throw new BadRequestException("Project status must be active for create");
+        }
 
         var created = Instant.now().toString();
 
@@ -112,12 +123,39 @@ public class ProjectService {
     }
 
     public ProjectEntity updateProject(ProjectEntity projectEntity) {
-        if (!projectRepository.existsByProjectId(projectEntity.getProjectId())) {
-            throw new ResourceNotFoundException("Project not found");
+        var project = this.projectRepository.findById(projectEntity.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+
+        if (project.getStatus() == ProjectStatus.ARCHIVED) {
+            log.error("Attempt to update an archived project {}", project);
+            throw new BadRequestException("Archived project cannot be updated");
+        }
+
+        if (projectEntity.getStatus() == ProjectStatus.ARCHIVED &&
+            project.getStatus() == ProjectStatus.ACTIVE) {
+            if (!StringUtils.isEmpty(project.getRepo().hookId())) {
+                // important to not trust the client and use entity value store in db.
+                log.info("archiving project, deleting webhook {}", project.getRepo().hookId());
+                try {
+                    this.githubRestClient.deleteGitHubWebhook(project.getUserId(), project.getRepo().name(), project.getRepo().hookId());
+                }
+                catch (RuntimeException ex)
+                {
+                    log.info("failed to delete webhook {}", project.getRepo().hookId());
+                    throw new GitRequestException("failed to delete webhook");
+                }
+                ProjectRepo newRepo = new ProjectRepo(project.getRepo().id(),project.getRepo().name(), project.getRepo().url(),
+                        project.getRepo().isPrivate(),project.getRepo().createdAt(), null);
+                projectEntity.setRepo(newRepo);
+            } else {
+                log.info("archiving project, but hook id is empty. ignoring");
+            }
         }
 
         // todo -- other validations
         // todo -- adding a repo to a blank project down the line
+        // todo -- maybe partial entity updates from FE?
+        // todo -- trusting the client too much?
         projectEntity.setUpdatedAt(Instant.now().toString());
         return projectRepository.save(projectEntity);
     }
@@ -125,11 +163,20 @@ public class ProjectService {
     public void deleteProject(String projectId) {
         var project = this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
 
+        // cascading deletes
+        this.eventsRepository.deleteByProjectId(projectId);
         // delete webhook
         // project.getRepo().name();
-        var result = this.githubRestClient.deleteGitHubWebhook(project.getUserId(), project.getRepo().name(), project.getRepo().hookId() );
-        if (!result) {
-            log.info("delete webhook for project {} failed", projectId);
+        if (project.getStatus() == ProjectStatus.ACTIVE)
+        {
+            try {
+                this.githubRestClient.deleteGitHubWebhook(project.getUserId(), project.getRepo().name(), project.getRepo().hookId() );
+            }
+            catch (RuntimeException ex)
+            {
+                log.info("delete webhook ({}) for project {} failed", project.getRepo().hookId() ,projectId);
+                throw new GitRequestException("failed to delete webhook in ");
+            }
         }
         this.projectRepository.deleteById(projectId);
     }
@@ -139,6 +186,7 @@ public class ProjectService {
     }
 
     public ProjectEvent updateProjectEvent(ProjectEvent projectEvent) {
+        // todo -- read the parent project and determine if it is archived
         if (!projectRepository.existsByProjectId(projectEvent.getProjectId())) {
             log.info( "project event {} is not found", projectEvent.getId());
             throw new ResourceNotFoundException("Project event not found");
@@ -148,6 +196,7 @@ public class ProjectService {
     }
 
     public ProjectEvent createProjectEvent(ProjectEvent projectEvent) {
+        // todo -- check parent status, if archived don't allow create
         // ensure the db will generate an id
         projectEvent.setId(null);
         var created = Instant.now().toString();

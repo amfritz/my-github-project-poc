@@ -1,14 +1,16 @@
 <h1>Project Details</h1>
-<p><a [routerLink]="'/'">back to project list</a></p>
 @if (project !== null) {
-    <app-view-project-details [project]="project" />
+    <app-view-project-details [project]="project"  (updated)="handleSubmit($event)" (delete)="onDeleteProject()"/>
 }
 
-<div class="event-list">
+<hr/>
+<p><a [routerLink]="'/'">back to project list</a></p>
+
     <h3>Development log</h3>
-    <div><button [disabled]="!canAdd()" (click)="onAdd()">Add new event</button></div>
+    <div><button  [class.disabled]="!canAdd()" [disabled]="!canAdd()" (click)="onAdd()">Add new event</button></div>
     <div (click)="changeSort()">sort: {{ sort() }}</div>
-@for (event of sortedEvents(); track event.id) {
-    <app-view-project-event [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
+<div class="event-list">
+    @for (event of sortedEvents(); track event.id) {
+    <app-view-project-event [canDelete]="project?.status == 'active'" [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
 }
 </div>

@@ -58,7 +58,7 @@ export class ProjectsService {
     return this.httpClient.post<ProjectEntity>(`${this.baseUrl}?add-commits=${addCommits}`,project)
       .pipe(
         tap((newProject) => {
-          this.projects().push(newProject);
+          this.projects.update(() => [...this.projects(), newProject]);
         }),
         catchError((error) => {
           console.log(error);
@@ -67,6 +67,25 @@ export class ProjectsService {
           );
         })
       )
+  }
+
+  updateProject(project: ProjectEntity) {
+      return this.httpClient.put<ProjectEntity>(`${this.baseUrl}/${project.id}`, project)
+          .pipe(
+              tap((resp) => {
+                      this.projects.update(val => {
+                          const newVal = [...val];
+                          newVal.splice(newVal.findIndex(e => e.id === project.id), 1, resp);
+                          return newVal;
+                      })
+                  }),
+              catchError((error) => {
+              console.log(error);
+              return throwError(
+                () => new Error("error")
+              );
+              })
+          );
   }
 
     getProjectEvents(projectId: string) {

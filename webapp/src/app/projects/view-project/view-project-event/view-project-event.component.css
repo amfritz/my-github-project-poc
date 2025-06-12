@@ -1,61 +1,52 @@
 .event-item {
-    border-radius: 0.4rem;
-    margin: 0.4rem;
-    padding: 0.4rem;
-    background: chocolate;
+    border-radius: 4px;
+    margin: 0.4rem auto;
+    padding: 0;
+}
+
+.desc {
+    display: inline-block;
+    padding: 0.5rem;
+    /*border: 1px solid black;*/
+    border-radius: 4px;
+    font-size: 0.9rem;
     color: white;
-    width: 90%;
-    flex: 1 1 auto;
-        /* copilot entry */
-    display: grid;
-    grid-template-columns: 6fr 1fr;
-    gap: 10px;
+    margin: 0.4rem auto;
+    background: chocolate;
+    width: 80%;
+    min-height: 1rem;
+    cursor: initial;
 }
 
 .new-event {
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     box-shadow: 0 0 10px #ccc;
     background: brown;
 }
 
-.event-text {
-    margin: 0.4rem auto;
-    background: bisque;
-    font-family: inherit;
-    width: 80%;
-    /* copilot entry */
-    /*height: 100px;*/
-}
-
 .event-actions {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 5px;
+    display: inline-block;
+    /*outline: 1px solid black;*/
+    align-self: center;
 }
 
 .event-date {
-    padding-right: 0.5rem;
-    margin-top: auto; /* Push date to bottom */
+    padding: 0;
+    margin: 0.4rem;
+    display: inline-block;
+    /*border: 1px solid #ccc;*/
+    width: 15%;
+    vertical-align: top;
 }
 
 button {
     font: inherit;
     cursor: pointer;
     border: none;
-    padding: 0.35rem 1.25rem;
+    padding: 0.5rem 0.5rem;
     border-radius: 4px;
     background-color: brown;
     color: white;
-    margin: auto 0.5rem;
-}
-
-textarea {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font: inherit;
-    font-size: 0.9rem;
-    color: #4f4b53;
-
+    margin: auto ;
+    ;
 }

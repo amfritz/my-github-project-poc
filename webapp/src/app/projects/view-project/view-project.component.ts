@@ -16,8 +16,12 @@ export class ViewProjectComponent implements OnInit {
   projectId = input.required<string>();
   private projectService = inject(ProjectsService);
   project :ProjectEntity| null =null;
+  savedProject: ProjectEntity| null = null;
   events = signal<ProjectEvents[]>([]);
-  canAdd = computed(() => this.events().findIndex(e => e.id === '') === -1);
+  canAdd = computed(() => {
+      return ((this.project?.status == 'active') &&
+            (this.events().findIndex(e => e.id === '') === -1));
+  });
   sort = signal<string>('asc');
   sortedEvents = computed(() => {
       let sort = this.sort();
@@ -33,9 +37,14 @@ export class ViewProjectComponent implements OnInit {
       this.project = this.projectService.findProjectById(this.projectId()) || null;
       if (this.project === null) {
           this.projectService.getProjectById(this.projectId()).subscribe( {
-              next: (resp) => this.project = resp,
+              next: (resp) => {
+                  this.project = resp
+                  this.savedProject = {...this.project};
+              },
               error: (err) => console.log('error', err)
           });
+      } else {
+          this.savedProject = {...this.project};
       }
 
       // the project id is a path parameter, so it will be set
@@ -51,7 +60,7 @@ export class ViewProjectComponent implements OnInit {
   }
 
   onAdd() {
-      console.log('add new event');
+      // console.log('add new event');
       let evt:ProjectEvents = {
           id: '', eventDescription: '', projectId: this.projectId(), eventDate: new Date().toISOString(),
           userId: 'amfritz',  repoName: this.project?.repo.name || '',
@@ -70,6 +79,32 @@ export class ViewProjectComponent implements OnInit {
           error: (err) => console.log('error', err)
       });
   }
+
+    handleSubmit(newProject: ProjectEntity) {
+      if (this.project === null) {
+          return;
+      }
+
+      console.log('submit: ', newProject);
+      if (newProject.status === 'archived' && this.savedProject?.status === 'active') {
+          if (!confirm('Status is set to archive, are you sure you want to archive this project?')) {
+              return;
+          }
+      }
+
+      this.projectService.updateProject(newProject).subscribe( {
+          next: (resp) => {
+              this.savedProject = {...resp};
+          },
+          error: (err) => console.log('error', err)
+      });
+  }
+
+    onDeleteProject() {
+      if (confirm('Are you sure you want to delete this project?')) {
+          console.log('delete project');
+      }
+    }
 
     updateEventDesc(value: string, event: ProjectEvents) {
       if (value === '') {

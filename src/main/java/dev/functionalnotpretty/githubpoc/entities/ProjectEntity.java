@@ -23,6 +23,7 @@ public class ProjectEntity {
     // rest of the payload
     private String projectName;
     private String description;
+    private ProjectStatus status;          // active / archived (no webhook)
     private ProjectRepo repo;
     // todo -- consider the spring annotations for auditing, but seems must be date objects and not strings
     private String createdAt;

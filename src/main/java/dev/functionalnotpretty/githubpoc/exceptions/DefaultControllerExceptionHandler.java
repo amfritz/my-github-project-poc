@@ -60,10 +60,10 @@ public class DefaultControllerExceptionHandler {
         ControllerExceptionError exceptionError = new ControllerExceptionError(
                 request.getRequestURI(),
                 e.getMessage(),
-                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                e.getCode(),
                 Instant.now(),
                 List.of()
         );
-        return new ResponseEntity<>(exceptionError, HttpStatus.SERVICE_UNAVAILABLE);
+        return new ResponseEntity<>(exceptionError, HttpStatus.valueOf(e.getCode()));
     }
 }

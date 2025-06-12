@@ -71,6 +71,7 @@ export class CreateProjectComponent implements OnInit {
     this.newProject.repo.url = repo.html_url;
     this.newProject.userId = 'amfritz'; // todo -- get this from auth service
     this.newProject.description = repo.description;
+    this.newProject.status = 'active';
 
     // the assumption is that commits won't occur while working here, so save api results
     if (this.selectedRepo.commits === undefined) {

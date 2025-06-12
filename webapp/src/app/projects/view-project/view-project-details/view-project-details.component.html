@@ -1,5 +1,48 @@
-<p><strong>Name:</strong> {{ project().name }}</p>
-<p><strong>Description:</strong> {{ project().description }} </p>
-<p><strong>Project created:</strong> {{ project().createdAt | date:'short' }}</p>
-<p>Repository: <a [href]="project().repo.url" target="_blank">{{ project().repo.name }}</a></p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-item">
+        <label for="name">Name:</label>
+        <input id="name" name="name" type="text" formControlName="projectName" placeholder="Enter project name">
+    </div>
+    <div class="form-item">
+        <label for="description">Description:</label>
+        <textarea rows="3" cols="75" id="description" name="description" formControlName="projectDescription"></textarea>
+    </div>
+
+    <div class="control-row">
+        <div class="form-item">
+            <label for="status">Project Status:</label>
+            <select id="status" name="status" formControlName="projectStatus">
+                <option value="active">Active</option>
+                <option value="archived">Archived</option>
+            </select>
+        </div>
+        <div class="form-item">
+            <label for="createDt">Project create date</label>
+            <input type="text" id="createDt" name="createDt" formControlName="createdDt"/>
+        </div>
+    </div>
+    <fieldset formGroupName="repository">
+        <legend>Linked Repository Information</legend>
+        <div class="control-row">
+            <div class="form-item">
+                <label for="repoName">Repository Name:</label>
+                <input id="repoName" name="repoName" type="text" formControlName="repositoryName" >
+            </div>
+            <div class="form-item">
+                <label for="repoUrl">Repository URL:</label>
+                <input id="repoUrl" name="repoUrl" type="text" formControlName="repoHookUrl" />
+            </div>
+            </div>
+        <div class="form-item">
+            <label for="repoHookId">Hook Id:</label>
+            <input id="repoHookId" name="repoHookId" type="text" formControlName="repoHookId" />
+        </div>
+
+    </fieldset>
+    <div class="project-actions">
+        <button [disabled]="isArchived" [class.disabled]="isArchived" type="submit">Save Project</button>
+        <button [disabled]="!isArchived" [class.disabled]="!isArchived" (click)="delete.emit()">Delete project</button>
+    <p>An archived project cannot be updated anymore. A project can only be deleted after it is archived.</p>
+    </div>
+</form>
 
