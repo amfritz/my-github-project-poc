@@ -26,18 +26,20 @@ export class CreateProjectComponent implements OnInit {
   newProject = emptyProject();
   isLoading = false;
   router = inject(Router);
+  useCommitList = true;
 
 
   ngOnInit(): void
   {
-    console.log('create-project component init: ');
-    console.dir(this.projectService.loadedProjects());
     // todo -- need a pretty isloading
     this.isLoading = true;
     this.githubService.getUserRepos().subscribe({
         next: (resp) => {
           this.loadRepos(resp);
           this.isLoading = false;
+          if (this.gitRepos.length > 0) {
+              this.selectRepo(this.gitRepos[0]);
+          }
         },
         error: (err) => {
           console.log('error', err);
@@ -47,7 +49,7 @@ export class CreateProjectComponent implements OnInit {
   }
 
   loadRepos(repos:GitHubRepo[]) {
-    var projects = this.projectService.loadedProjects();
+    let projects = this.projectService.loadedProjects();
     this.gitRepos = repos.filter( r => projects.filter(p => p.repo.name === r.name).length === 0);
   }
 
@@ -91,7 +93,7 @@ export class CreateProjectComponent implements OnInit {
 
   createProject () {
     // todo -- on success, navigate to new project
-    this.projectService.createProject(this.newProject, true).subscribe( {
+    this.projectService.createProject(this.newProject, this.useCommitList).subscribe( {
       next: (resp) => this.router.navigate(['/project', resp.projectId]),
       error: (err ) => console.log(err),
           })

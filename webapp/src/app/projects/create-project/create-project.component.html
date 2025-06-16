@@ -4,7 +4,8 @@
 } @else {
 
 <div class="repo-list">
-     <h2>available repositories</h2>
+     <h2>Available Repositories</h2>
+    <p>Select a repository to initialize a project with.</p>
 @if (gitRepos !== undefined) {
     <ul>
     @for(repo of gitRepos; track repo.id ) {
@@ -23,11 +24,11 @@
     </div>
     <div>
         <label for="projectDescription">Project description:</label>
-        <textarea cols="75" row="15" id="projectDescription" placeholder="Enter project description"  [(ngModel)]="newProject.description"></textarea>
+        <textarea cols="50" rows="5" id="projectDescription" placeholder="Enter project description"  [(ngModel)]="newProject.description"></textarea>
     </div>
     <div>
-        <input type="checkbox" id="chk-events" name="chk-events" value="events" checked="true" />
-        <label for="chk-events">Use commits messages to create inital proejct events</label>
+        <input type="checkbox" id="chk-events" name="chk-events" value="events" [checked]="useCommitList" (change)="useCommitList = !useCommitList"/>
+        <label for="chk-events">Use commits messages to create initial project events</label>
     </div>
   </div>
 

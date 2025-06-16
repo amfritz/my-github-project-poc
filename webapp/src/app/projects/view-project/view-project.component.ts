@@ -5,10 +5,13 @@ import {ProjectEvents} from '../../models/project-events';
 import {ViewProjectDetailsComponent} from './view-project-details/view-project-details.component';
 import {ViewProjectEventComponent} from './view-project-event/view-project-event.component';
 import {RouterLink} from '@angular/router';
+import {ToastService} from '../../services/toast.service';
+import {FormsModule} from '@angular/forms';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-view-project',
-  imports: [ViewProjectDetailsComponent, ViewProjectEventComponent, RouterLink],
+  imports: [ViewProjectDetailsComponent, ViewProjectEventComponent, RouterLink, FormsModule],
   templateUrl: './view-project.component.html',
   styleUrl: './view-project.component.css'
 })
@@ -18,10 +21,6 @@ export class ViewProjectComponent implements OnInit {
   project :ProjectEntity| null =null;
   savedProject: ProjectEntity| null = null;
   events = signal<ProjectEvents[]>([]);
-  canAdd = computed(() => {
-      return ((this.project?.status == 'active') &&
-            (this.events().findIndex(e => e.id === '') === -1));
-  });
   sort = signal<string>('asc');
   sortedEvents = computed(() => {
       let sort = this.sort();
@@ -31,6 +30,12 @@ export class ViewProjectComponent implements OnInit {
           return this.events().sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime());
       }
   });
+  toastService = inject(ToastService);
+  newEventDescription = signal<string>('');
+  newEventDate = signal<string>('');
+  newEventTime = signal<string>('');
+  canAdd = computed(() => this.newEventDescription().length > 0);
+  datePipe = new DatePipe('en-US');
 
   ngOnInit(): void {
       // check to see if it's loaded. on a page reload it will be null
@@ -41,7 +46,7 @@ export class ViewProjectComponent implements OnInit {
                   this.project = resp
                   this.savedProject = {...this.project};
               },
-              error: (err) => console.log('error', err)
+              error: (err) => this.toastService.showToast("An error occurred: " + err.toString(), 'error'),
           });
       } else {
           this.savedProject = {...this.project};
@@ -53,6 +58,12 @@ export class ViewProjectComponent implements OnInit {
           error: (err) => console.log('error', err)
       });
 
+      this.initNewDate();
+  }
+
+  initNewDate() {
+      this.newEventDate.set(this.datePipe.transform(new Date(), 'YYYY-MM-dd' ) || '');
+      this.newEventTime.set(this.datePipe.transform(new Date(), 'HH:mm' ) || '');
   }
 
   changeSort() {
@@ -61,11 +72,24 @@ export class ViewProjectComponent implements OnInit {
 
   onAdd() {
       // console.log('add new event');
+
+      // create iso string
+      let dateSt = this.datePipe.transform(new Date(this.newEventDate() + 'T' + this.newEventTime()), 'yyyy-MM-ddTHH:mm:ss.SSSZ') || '' ;
       let evt:ProjectEvents = {
-          id: '', eventDescription: '', projectId: this.projectId(), eventDate: new Date().toISOString(),
+          id: '', eventDescription: this.newEventDescription(), projectId: this.projectId(), eventDate: dateSt,
           userId: 'amfritz',  repoName: this.project?.repo.name || '',
       }
-      this.events.update(val => [...val, evt]);
+      console.log('new event: ', evt);
+      this.projectService.createProjectEvent(evt).subscribe( {
+          next: (resp) => {
+              this.events.update(val => [...val, resp]);
+              this.newEventDescription.set('');
+              this.initNewDate();
+              this.toastService.showToast("Save successful.", 'success');
+          },
+          error: (err) => this.toastService.showToast("An error occurred saving the new item: " + err.toString(), 'error'),
+      })
+      //
   }
 
   onDelete(event: ProjectEvents) {
@@ -82,6 +106,7 @@ export class ViewProjectComponent implements OnInit {
 
     handleSubmit(newProject: ProjectEntity) {
       if (this.project === null) {
+      console.log('project is null on save');
           return;
       }
 
@@ -94,7 +119,8 @@ export class ViewProjectComponent implements OnInit {
 
       this.projectService.updateProject(newProject).subscribe( {
           next: (resp) => {
-              this.savedProject = {...resp};
+              this.savedProject = {...  resp};
+              this.toastService.showToast("Save successful.",'success' );
           },
           error: (err) => console.log('error', err)
       });
@@ -110,37 +136,21 @@ export class ViewProjectComponent implements OnInit {
       if (value === '') {
           // delete it
           // todo -- add confirm delete
-      } else if (event.id === '')
-      {
-          // create new event
-          let req = {...event};
-          req.eventDescription = value;
-          this.projectService.createProjectEvent(req).subscribe( {
-              next: (resp) => {
-                  this.events.update(val => {
-                      const newVal = [...val];
-                      newVal.splice(newVal.findIndex(e => e.id === ''), 1, resp);
-                      return newVal;
-                  });
-              },
-              error: (err) => console.log('error', err)
-          })
-      } else {
+      }  else {
           // create a copy of the object and only update it in the list if the update is successful
           let req = {...event};
           req.eventDescription = value;
           this.updateEvent(req);
       }
-
   }
 
     onVisited(eventProject: ProjectEvents) {
       let req = {...eventProject};
       req.isNewEvent = false;
-      this.updateEvent(req);
+      this.updateEvent(req, false);
     }
 
-    private updateEvent(event: ProjectEvents) {
+    private updateEvent(event: ProjectEvents, showToast: boolean = true) {
         this.projectService.updateProjectEvent(event).subscribe( {
             next: (resp) => {
                 this.events.update(val => {
@@ -148,9 +158,11 @@ export class ViewProjectComponent implements OnInit {
                     newVal.splice(newVal.findIndex(e => e.id === resp.id), 1, resp);
                     return newVal;
                 });
-
+                if (showToast) {
+                    this.toastService.showToast("Save successful.", 'success');
+                }
             },
-            error: (err) => console.log('error', err)
+            error: (err) => this.toastService.showToast("An error occurred: " + err.toString(), 'error'),
         });
     }
 

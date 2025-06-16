@@ -5,6 +5,19 @@
     width: 80%;
     /*height: 100vh;*/
 }
+.new-event {
+    position: sticky;
+    top: 0;
+    background: bisque;
+    margin: auto;
+    padding: 0.5rem;
+}
+.new-event > * {
+    display: inline-block;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    vertical-align: top;
+}
 
 .project-actions {
     margin: 0.5rem;

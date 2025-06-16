@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ErrorService } from './error.service';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {catchError, Observable, tap, throwError} from 'rxjs';
 import { ProjectEntity } from '../models/project';
 import { ProjectEvents } from '../models/project-events';
@@ -30,7 +30,7 @@ export class ProjectsService {
           }
           ),
           catchError((error) => {
-            console.log(error);
+            console.log('caught error  in service: ', error);
             return throwError(
               () => new Error("error")
             );
@@ -45,12 +45,17 @@ export class ProjectsService {
   getProjectById(projectId: string) {
       return this.httpClient.get<ProjectEntity>(`${this.baseUrl}/${projectId}`)
           .pipe(
-              catchError((error) => {
-              console.log(error);
-              return throwError(
-                () => new Error("get project by id error")
-              );
-              })
+              catchError((error:HttpErrorResponse) => {
+                      if (error.status === 404) {
+                          return throwError(
+                              () => new Error(`Project ID ${projectId} not found`)
+                          );
+                      }
+                      console.log('caught error  in service: ', error);
+                      return throwError(
+                          () => new Error("An error occurred trying to get the project"));
+                  }
+              )
           )
   }
 

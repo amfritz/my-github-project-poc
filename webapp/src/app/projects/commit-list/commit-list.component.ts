@@ -4,10 +4,11 @@ import { GitHubCommit } from '../../models/git-hub-commit';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { GitHubRepo } from '../../models/git-hub-repo';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-commit-list',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './commit-list.component.html',
   styleUrl: './commit-list.component.css'
 })

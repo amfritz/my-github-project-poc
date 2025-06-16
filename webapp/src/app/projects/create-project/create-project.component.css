@@ -1,5 +1,5 @@
 li {
-    text-decoration: underline;
+
     cursor: pointer;
 }
 
@@ -22,6 +22,19 @@ vertical-align : top;
   width: 45%;
   padding: 0;
   vertical-align: top;
+}
+
+label {
+    font-weight: bold;
+    font-family: inherit;
+    margin: 0.5rem;
+
+}
+
+input, textarea {
+    font: inherit;
+    background: white;
+    margin: 0.5rem;
 }
 
 button {

@@ -1,0 +1,13 @@
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open>
+    <h2>Edit Description</h2>
+        <div>
+            <label for="description">Event description</label>
+            <textarea id="description" name="description" rows="10" cols="70" [(ngModel)]="ngModelDesc"></textarea>
+        </div>
+        <p class="actions">
+            <button type="submit" (click)="onSubmit()">Update</button>
+            <button type="button" (click)="onCancel()">Cancel</button>
+        </p>
+
+</dialog>

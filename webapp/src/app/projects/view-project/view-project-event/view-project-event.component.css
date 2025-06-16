@@ -16,6 +16,7 @@
     width: 80%;
     min-height: 1rem;
     cursor: initial;
+    white-space: pre-wrap;
 }
 
 .new-event {
