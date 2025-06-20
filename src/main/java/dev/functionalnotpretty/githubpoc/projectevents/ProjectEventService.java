@@ -1,9 +1,7 @@
 package dev.functionalnotpretty.githubpoc.projectevents;
 
-import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
 import dev.functionalnotpretty.githubpoc.project.ProjectRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,42 +20,53 @@ public class ProjectEventService {
         this.projectRepository = projectRepository;
         this.eventsRepository = eventsRepository;
     }
-    public List<ProjectEvent> getAllProjectEvents(String projectId) {
-        return this.eventsRepository.findAllByProjectId(projectId);
+
+    public List<ProjectEventDto> getAllProjectEvents(String projectId) {
+        return this.eventsRepository
+                .findAllByProjectId(projectId)
+                .stream()
+                .map(ProjectEventMapper.INSTANCE::projectEventToProjectEventDto)
+                .toList();
     }
 
-    public ProjectEvent updateProjectEvent(ProjectEvent projectEvent) {
+    public ProjectEventDto updateProjectEvent(ProjectEventDto projectEventDto) {
         // todo -- read the parent project and determine if it is archived
+        var projectEvent = ProjectEventMapper.INSTANCE.projectEventDtoToProjectEvent(projectEventDto);
+
         if (!projectRepository.existsByProjectId(projectEvent.getProjectId())) {
             log.info( "project event {} is not found", projectEvent.getId());
             throw new ResourceNotFoundException("Project event not found");
         }
+        projectEvent.setUserId("amfritz");      // refactor this from user session when not poc
         projectEvent.setUpdatedDt(Instant.now().toString());
-        return this.eventsRepository.save(projectEvent);
+        return ProjectEventMapper.INSTANCE.projectEventToProjectEventDto(this.eventsRepository.save(projectEvent));
     }
 
-    public ProjectEvent createProjectEvent(ProjectEvent projectEvent) {
+    public ProjectEventDto createProjectEvent(ProjectEventDto projectEventDto) {
         // todo -- check parent status, if archived don't allow create
         // ensure the db will generate an id
+        var projectEvent = ProjectEventMapper.INSTANCE.projectEventDtoToProjectEvent(projectEventDto);
         projectEvent.setId(null);
+        projectEvent.setUserId("amfritz");      // refactor this from user session when not poc
         var created = Instant.now().toString();
         projectEvent.setCreatedDt(created);
         projectEvent.setUpdatedDt(created);
-        return this.eventsRepository.save(projectEvent);
+        return ProjectEventMapper.INSTANCE.projectEventToProjectEventDto(this.eventsRepository.save(projectEvent));
     }
 
-    public List<ProjectEvent> updateProjectEvents(String projectId, List<ProjectEvent> events) {
+    public void createProjectEventList(String projectId, List<ProjectEventDto> eventsDto) {
         // validate that all objects are for the paths
+        var events = ProjectEventMapper.INSTANCE.projectDtoListToProjectEventList(eventsDto);
         for(ProjectEvent event : events) {
-            if (!StringUtils.equalsIgnoreCase(event.getProjectId(), projectId)) {
-                log.info("bad request, project id {} does not match project id {}", event.getProjectId(), projectId);
-                throw new BadRequestException("Invalid project id");
-            }
-
+            event.setProjectId(projectId);
+            event.setUserId("amfritz");
             var created = Instant.now().toString();
+            event.setCreatedDt(created);
             event.setUpdatedDt(created);
         }
-        return (List<ProjectEvent>) this.eventsRepository.saveAll(events);
+
+        this.eventsRepository.saveAll(events);
+        //ProjectEventMapper.INSTANCE.projectEntityListToProjectEntityDtoList((List<ProjectEvent>) result);
     }
 
     // event Ids, the object id, is unique per container so don't need the project is
@@ -68,6 +77,10 @@ public class ProjectEventService {
         }
 
         this.eventsRepository.deleteByProjectIdAndId(projectId, eventId);
+    }
+
+    public void deleteAllProjectEvents(String projectId) {
+        this.eventsRepository.deleteByProjectId(projectId);
     }
 
 }

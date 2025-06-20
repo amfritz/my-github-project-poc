@@ -24,7 +24,7 @@ export class CreateProjectComponent implements OnInit {
   gitCommits:GitHubCommit[] = [];
   selectedRepo:GitHubRepo|undefined = undefined;
   location = inject(Location);
-  newProject: ProjectPostRequest = {userId: 'amfritz', name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
+  newProject: ProjectPostRequest = {name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
   isLoading = false;
   router = inject(Router);
   useCommitList = true;
@@ -60,7 +60,7 @@ export class CreateProjectComponent implements OnInit {
       // currently selected, so unselect it
       this.selectedRepo = undefined;
       this.gitCommits = [];
-      this.newProject = {userId: 'amfritz', name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
+      this.newProject = {name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
 
         return;
     }
@@ -74,7 +74,6 @@ export class CreateProjectComponent implements OnInit {
     this.newProject.repo.url = repo.html_url;
     this.newProject.repo.isPrivate = repo.isPrivate || false;
     this.newProject.repo.url = repo.html_url;
-    this.newProject.userId = 'amfritz'; // todo -- get this from auth service
     this.newProject.description = repo.description;
 
     // the assumption is that commits won't occur while working here, so save api results
@@ -98,7 +97,7 @@ export class CreateProjectComponent implements OnInit {
       if (this.useCommitList) {
           for (let i = 0; i < this.gitCommits.length; i++) {
               let commit = this.gitCommits[i];
-              this.newProject.events.push({userId: 'amfritz', eventDescription: commit.commit.message, eventDate: commit.commit.author.date,
+              this.newProject.events.push({ eventDescription: commit.commit.message, eventDate: commit.commit.author.date,
                     isNewEvent: true, repoName: this.selectedRepo?.name});
           }
       }

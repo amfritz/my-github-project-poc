@@ -23,13 +23,8 @@ public class ProjectsController {
 
     @GetMapping
     public List<ProjectDto> getProjects() {
-        log.info("getProjects in projects api");
-
-        var result = this.projectService.getAllProjectsByUserId("amfritz")
-                .stream()
-                .map(ProjectMapper.INSTANCE::projectToProjectDto)
-                .toList();
-        log.info("read {} projects", result.size());
+        var result = this.projectService.getAllProjectsByUserId("amfritz");
+        log.info("getProjects read {} projects", result.size());
         return result;
     }
 
@@ -37,13 +32,13 @@ public class ProjectsController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProjectDto createProject(@Valid @RequestBody CreateProjectDto project) {
         log.info("createProject with events in projects controller");
-        return ProjectMapper.INSTANCE.projectToProjectDto(this.projectService.createProjectWithEvents(project));
+        return this.projectService.createProjectWithEvents(project);
         }
 
     @GetMapping("{projectId}")
     public ProjectDto getProjectById(@PathVariable("projectId") String projectId) {
         log.info("getProject({}) in projects controller", projectId);
-        return ProjectMapper.INSTANCE.projectToProjectDto(this.projectService.getProject(projectId));
+        return this.projectService.getProject(projectId);
     }
 
     @PutMapping("{projectId}")
@@ -53,7 +48,7 @@ public class ProjectsController {
             log.info("updateProject({}) in projects controller project id does not match object", projectId);
             throw new BadRequestException("Project id mismatch");
         }
-        return ProjectMapper.INSTANCE.projectToProjectDto(this.projectService.updateProject(ProjectMapper.INSTANCE.projectDtoToProjectEntity(project)));
+        return this.projectService.updateProject(project);
     }
 
     @DeleteMapping("{projectId}")

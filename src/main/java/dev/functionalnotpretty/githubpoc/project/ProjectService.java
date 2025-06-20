@@ -1,10 +1,9 @@
 package dev.functionalnotpretty.githubpoc.project;
 
-import dev.functionalnotpretty.githubpoc.projectevents.ProjectEvent;
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
-import dev.functionalnotpretty.githubpoc.projectevents.ProjectEventsRepository;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEventService;
 import dev.functionalnotpretty.githubpoc.githubclient.GithubRestClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,25 +19,29 @@ public class ProjectService {
 
     private final static Logger log = LoggerFactory.getLogger(ProjectService.class);
     private final ProjectRepository projectRepository;
-    private final ProjectEventsRepository eventsRepository;
     private final GithubRestClient githubRestClient;
+    private final ProjectEventService projectEventService;
 
-    ProjectService(ProjectRepository projectRepository, ProjectEventsRepository eventsRepository, GithubRestClient githubRestClient) {
+    ProjectService(ProjectRepository projectRepository, ProjectEventService projectEventService, GithubRestClient githubRestClient) {
         this.projectRepository = projectRepository;
-        this.eventsRepository = eventsRepository;
+        this.projectEventService = projectEventService;
         this.githubRestClient = githubRestClient;
     }
 
-    public List<ProjectEntity> getAllProjectsByUserId(String userId) {
-        return projectRepository.findAllByUserId(userId);
+    public List<ProjectDto> getAllProjectsByUserId(String userId) {
+        return  this.projectRepository
+                .findAllByUserId(userId)
+                .stream()
+                .map(ProjectMapper.INSTANCE::projectToProjectDto)
+                .toList();
     }
 
-    public ProjectEntity getProject(String projectId) {
-        return this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
-//        return this.projectRepository.findByIdAndProjectId(projectId, projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+    public ProjectDto getProject(String projectId) {
+        var result = this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        return ProjectMapper.INSTANCE.projectToProjectDto(result);
     }
 
-    public ProjectEntity createProjectWithEvents(CreateProjectDto project) {
+    public ProjectDto createProjectWithEvents(CreateProjectDto project) {
         if (this.projectRepository.existsByRepo_Name(project.repo().name())) {
             log.info("Project using that repository already exists");
             throw new BadRequestException("Project with this repository already exists");
@@ -48,6 +51,7 @@ public class ProjectService {
         var created = Instant.now().toString();
         // generate our own id and use the same id for the project id as the partition key
         var uuid = UUID.randomUUID().toString();
+        projectEntity.setUserId("amfritz");     // refactor this from user session when not in POC
         projectEntity.setStatus(ProjectStatus.ACTIVE);
         projectEntity.setId(uuid);
         projectEntity.setProjectId(uuid);
@@ -56,28 +60,23 @@ public class ProjectService {
 
         var createdProject = this.projectRepository.save(projectEntity);
 
-        List<ProjectEvent> events = ProjectMapper.INSTANCE.projectDtoListToProjectEntityList(project.events());
-        for (ProjectEvent event : events) {
-            // todo validate the event
-            event.setProjectId(createdProject.getId());
-            event.setCreatedDt(created);
-            event.setUpdatedDt(created);
-            event.setNewEvent(true);
+        if (!project.events().isEmpty()) {
+            this.projectEventService.createProjectEventList(createdProject.getId(), project.events());
         }
-
-        this.eventsRepository.saveAll(events);
 
         var resp = this.githubRestClient.createGitHubRepositoryWebHook(createdProject.getUserId(), createdProject.getRepo().name());
         log.info("created webhook response {} ", resp);
-        //projectEntity.getRepo().
+
+        // update the repo with the hook id
         ProjectRepo newRepo = new ProjectRepo(projectEntity.getRepo().id(), projectEntity.getRepo().name(), projectEntity.getRepo().url(),
                 projectEntity.getRepo().isPrivate(), projectEntity.getRepo().createdAt(), Long.toString(resp.id()));
         createdProject.setRepo(newRepo);
         this.projectRepository.save(createdProject);
-        return createdProject;
+        return ProjectMapper.INSTANCE.projectToProjectDto(createdProject);
     }
 
-    public ProjectEntity updateProject(ProjectEntity projectEntity) {
+    public ProjectDto updateProject(ProjectDto projectEntityDto) {
+        var projectEntity = ProjectMapper.INSTANCE.projectDtoToProjectEntity(projectEntityDto);
         var project = this.projectRepository.findByIdAndProjectId(projectEntity.getId(), projectEntity.getProjectId());
         if (project == null) {
             throw new ResourceNotFoundException("Project not found");
@@ -114,7 +113,7 @@ public class ProjectService {
         // todo -- maybe partial entity updates from FE?
         // todo -- trusting the client too much?
         projectEntity.setUpdatedAt(Instant.now().toString());
-        return projectRepository.save(projectEntity);
+        return ProjectMapper.INSTANCE.projectToProjectDto( projectRepository.save(projectEntity));
     }
 
     public void deleteProject(String projectId) {
@@ -124,7 +123,7 @@ public class ProjectService {
         }
 
         // cascading deletes
-        this.eventsRepository.deleteByProjectId(projectId);
+        this.projectEventService.deleteAllProjectEvents(projectId);
         // delete webhook
         // project.getRepo().name();
         if (project.getStatus() == ProjectStatus.ACTIVE)

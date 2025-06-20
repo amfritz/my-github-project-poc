@@ -1,5 +1,4 @@
 export interface ProjectPostRequest {
-    userId: string;
     name: string;
     description: string;
     repo: {
@@ -13,7 +12,6 @@ export interface ProjectPostRequest {
 }
 
 export interface CreateEvents {
-    userId: string;
     eventDescription: string;
     eventDate: string;
     repoName?: string;

@@ -1,7 +1,6 @@
 package dev.functionalnotpretty.githubpoc.projectevents;
 
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
-import dev.functionalnotpretty.githubpoc.project.ProjectService;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,11 +24,8 @@ public class ProjectEventController {
     @GetMapping
     public List<ProjectEventDto> getProjectEvents(@PathVariable String projectId) {
         log.info("getProjectMessages in projects api {}", projectId);
-        return this.projectService.getAllProjectEvents(projectId)
-                .stream()
-                .map(ProjectEventMapper.INSTANCE::projectEventToProjectEventDto)
-                .toList();
-    }
+        return this.projectService.getAllProjectEvents(projectId);
+     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -40,7 +36,7 @@ public class ProjectEventController {
             throw new BadRequestException("Project id mismatch");
         }
 
-        return ProjectEventMapper.INSTANCE.projectEventToProjectEventDto(this.projectService.createProjectEvent(ProjectEventMapper.INSTANCE.projectEventDtoToProjectEvent(projectEvent)));
+        return this.projectService.createProjectEvent(projectEvent);
     }
 
     @PutMapping("{eventId}")
@@ -52,20 +48,20 @@ public class ProjectEventController {
             log.info("updateProjectEvent in projects controller project/event id does not match input object");
             throw new BadRequestException("id mismatch in request object");
         }
-        return ProjectEventMapper.INSTANCE.projectEventToProjectEventDto(this.projectService.updateProjectEvent(ProjectEventMapper.INSTANCE.projectEventDtoToProjectEvent(projectEventDto)));
+        return this.projectService.updateProjectEvent(projectEventDto);
     }
 
-    @PutMapping
-    public List<ProjectEventDto> bulkUpdateProjectMessages(@Valid @PathVariable String projectId, @RequestBody List<ProjectEventDto> events) {
-        log.info("add {} ProjectMessages in projects api for {}", events.size(), projectId);
-        var result = this.projectService.updateProjectEvents(projectId, events.stream()
-                .map(ProjectEventMapper.INSTANCE::projectEventDtoToProjectEvent)
-                .toList()
-        );
-        return result.stream()
-                .map(ProjectEventMapper.INSTANCE::projectEventToProjectEventDto)
-                .toList();
-    }
+//    @PutMapping
+//    public List<ProjectEventDto> bulkUpdateProjectMessages(@Valid @PathVariable String projectId, @RequestBody List<ProjectEventDto> events) {
+//        log.info("add {} ProjectMessages in projects api for {}", events.size(), projectId);
+//        var result = this.projectService.updateProjectEvents(projectId, events.stream()
+//                .map(ProjectEventMapper.INSTANCE::projectEventDtoToProjectEvent)
+//                .toList()
+//        );
+//        return result.stream()
+//                .map(ProjectEventMapper.INSTANCE::projectEventToProjectEventDto)
+//                .toList();
+//    }
 
     @DeleteMapping("{eventId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

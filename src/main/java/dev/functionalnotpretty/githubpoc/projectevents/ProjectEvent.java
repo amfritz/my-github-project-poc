@@ -25,22 +25,7 @@ public class ProjectEvent {
     private String createdDt;       // todo -- this isn't going to work like i think it will work. ne
     private String updatedDt;
 
-    private final static String EVENT_TYPE = "event";
-
     public ProjectEvent() {
-    }
-
-    public ProjectEvent(ProjectEventDto dto) {
-        this.id = dto.id();
-        this.projectId = dto.projectId();
-        this.userId = dto.userId();
-        this.eventDescription = dto.eventDescription();
-        this.eventDate = dto.eventDate();
-        this.repoName = dto.repoName();
-        this.branch_name = dto.branchName();
-        this.isNewEvent = dto.isNewEvent();
-        this.createdDt = dto.createdDt();
-        this.updatedDt = dto.updatedDt();
     }
 
     public ProjectEvent(String userId, String projectId, String eventDescription, String eventDate, String repoName, String branch_name, boolean isNewEvent,

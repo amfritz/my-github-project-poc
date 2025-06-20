@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface ProjectEventMapper {
     ProjectEventMapper INSTANCE = Mappers.getMapper(ProjectEventMapper.class);
@@ -12,6 +14,11 @@ public interface ProjectEventMapper {
     @Mapping(target = "branchName", source = "branch_name")
     ProjectEventDto projectEventToProjectEventDto(ProjectEvent projectEvent);
 
+    @Mapping(target = "userId",  ignore = true)
     @Mapping(target = "branch_name", source = "branchName")
+    @Mapping(target = "newEvent", source = "isNewEvent")
     ProjectEvent projectEventDtoToProjectEvent(ProjectEventDto projectEventDto);
+
+    List<ProjectEvent> projectDtoListToProjectEventList(List<ProjectEventDto> events);
+//    List<ProjectEventDto> projectEntityListToProjectEntityDtoList(List<ProjectEvent> events);
 }
