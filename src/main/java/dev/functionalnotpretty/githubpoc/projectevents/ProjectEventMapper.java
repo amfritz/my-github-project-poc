@@ -14,9 +14,11 @@ public interface ProjectEventMapper {
     @Mapping(target = "branchName", source = "branch_name")
     ProjectEventDto projectEventToProjectEventDto(ProjectEvent projectEvent);
 
+    @Mapping(target = "userId",  ignore = true)
     @Mapping(target = "branch_name", source = "branchName")
+    @Mapping(target = "newEvent", source = "isNewEvent")
     ProjectEvent projectEventDtoToProjectEvent(ProjectEventDto projectEventDto);
 
     List<ProjectEvent> projectDtoListToProjectEventList(List<ProjectEventDto> events);
-    List<ProjectEventDto> projectEntityListToProjectEntityDtoList(List<ProjectEvent> events);
+//    List<ProjectEventDto> projectEntityListToProjectEntityDtoList(List<ProjectEvent> events);
 }
