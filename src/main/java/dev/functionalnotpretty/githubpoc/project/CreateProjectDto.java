@@ -1,7 +1,6 @@
-package dev.functionalnotpretty.githubpoc.models;
+package dev.functionalnotpretty.githubpoc.project;
 
-import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
-import dev.functionalnotpretty.githubpoc.entities.ProjectStatus;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEventDto;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;

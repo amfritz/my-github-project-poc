@@ -1,17 +1,11 @@
-package dev.functionalnotpretty.githubpoc.services;
+package dev.functionalnotpretty.githubpoc.project;
 
-import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
-import dev.functionalnotpretty.githubpoc.entities.ProjectRepo;
-import dev.functionalnotpretty.githubpoc.entities.ProjectStatus;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEvent;
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
-import dev.functionalnotpretty.githubpoc.models.CreateProjectDto;
-import dev.functionalnotpretty.githubpoc.models.ProjectMapper;
-import dev.functionalnotpretty.githubpoc.repositories.ProjectEventsRepository;
-import dev.functionalnotpretty.githubpoc.repositories.ProjectRepository;
-import dev.functionalnotpretty.githubpoc.restservice.GithubRestClient;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEventsRepository;
+import dev.functionalnotpretty.githubpoc.githubclient.GithubRestClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,51 +141,4 @@ public class ProjectService {
         this.projectRepository.deleteByIdAndProjectId(projectId, projectId);
     }
 
-    public List<ProjectEvent> getAllProjectEvents(String projectId) {
-        return this.eventsRepository.findAllByProjectId(projectId);
-    }
-
-    public ProjectEvent updateProjectEvent(ProjectEvent projectEvent) {
-        // todo -- read the parent project and determine if it is archived
-        if (!projectRepository.existsByProjectId(projectEvent.getProjectId())) {
-            log.info( "project event {} is not found", projectEvent.getId());
-            throw new ResourceNotFoundException("Project event not found");
-        }
-        projectEvent.setUpdatedDt(Instant.now().toString());
-        return this.eventsRepository.save(projectEvent);
-    }
-
-    public ProjectEvent createProjectEvent(ProjectEvent projectEvent) {
-        // todo -- check parent status, if archived don't allow create
-        // ensure the db will generate an id
-        projectEvent.setId(null);
-        var created = Instant.now().toString();
-        projectEvent.setCreatedDt(created);
-        projectEvent.setUpdatedDt(created);
-        return this.eventsRepository.save(projectEvent);
-    }
-
-    public List<ProjectEvent> updateProjectEvents(String projectId, List<ProjectEvent> events) {
-        // validate that all objects are for the paths
-        for(ProjectEvent event : events) {
-            if (!StringUtils.equalsIgnoreCase(event.getProjectId(), projectId)) {
-                log.info("bad request, project id {} does not match project id {}", event.getProjectId(), projectId);
-                throw new BadRequestException("Invalid project id");
-            }
-
-            var created = Instant.now().toString();
-            event.setUpdatedDt(created);
-        }
-        return (List<ProjectEvent>) this.eventsRepository.saveAll(events);
-    }
-
-    // event Ids, the object id, is unique per container so don't need the project is
-    public void deleteProjectEvent(String projectId, String eventId) {
-        if (!eventsRepository.existsByProjectIdAndId(projectId, eventId)) {
-            log.info( "specified project event is not found");
-            throw new ResourceNotFoundException("Project event not found");
-        }
-
-        this.eventsRepository.deleteByProjectIdAndId(projectId, eventId);
-    }
 }

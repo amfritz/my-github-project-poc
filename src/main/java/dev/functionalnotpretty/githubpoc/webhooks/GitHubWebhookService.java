@@ -1,11 +1,10 @@
-package dev.functionalnotpretty.githubpoc.services;
+package dev.functionalnotpretty.githubpoc.webhooks;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
-import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
-import dev.functionalnotpretty.githubpoc.repositories.ProjectEventsRepository;
-import dev.functionalnotpretty.githubpoc.repositories.ProjectRepository;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEvent;
+import dev.functionalnotpretty.githubpoc.projectevents.ProjectEventsRepository;
+import dev.functionalnotpretty.githubpoc.project.ProjectRepository;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,12 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class GitHubWebhookService {
@@ -41,7 +36,7 @@ public class GitHubWebhookService {
         headerVal = headers.get("X-GitHub-Event");
         var request = headerVal!=null ? headerVal.getFirst(): "";
 
-        log.info("received webhook event({}): {}", hookId, request);
+        log.info("received webhook event({})", hookId);
 
         headerVal = headers.get("x-hub-signature-256");
         var signature = headerVal!=null ? headerVal.getFirst(): "";
@@ -55,7 +50,7 @@ public class GitHubWebhookService {
         }
 
         if (StringUtils.equalsIgnoreCase(request, "ping")){
-            log.info("github ping event received. body: {}", body);
+            log.info("github ping event received.");
         }
         if (StringUtils.equalsIgnoreCase(request, "push")){
             log.info("github push event received. body: {}", body);

@@ -1,9 +1,8 @@
-package dev.functionalnotpretty.githubpoc.entities;
+package dev.functionalnotpretty.githubpoc.projectevents;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
-import dev.functionalnotpretty.githubpoc.models.ProjectEventDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;

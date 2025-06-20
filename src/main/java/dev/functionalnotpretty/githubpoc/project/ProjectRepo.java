@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.githubpoc.entities;
+package dev.functionalnotpretty.githubpoc.project;
 
 public record ProjectRepo(
         String id,
