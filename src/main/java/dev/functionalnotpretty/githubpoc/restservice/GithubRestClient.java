@@ -2,20 +2,15 @@ package dev.functionalnotpretty.githubpoc.restservice;
 
 import dev.functionalnotpretty.githubpoc.entities.*;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +20,9 @@ public class GithubRestClient {
     private final static String GITHUB_BASE_URL = "https://api.github.com";
 
     private final static String token = System.getenv("GITHUB_TOKEN");
+
+    public final static String GITHUB_LINK_HEADER = "Link";
+    private final static String REL_NEXT = "rel=\"next\"";
 
     public GithubRestClient(RestClient.Builder restClientBuilder) {
         this.githubRestClient = restClientBuilder.baseUrl(GITHUB_BASE_URL)
@@ -51,17 +49,56 @@ public class GithubRestClient {
         return this.githubRestClient.get()
                 .uri("/user/repos")
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<GitHubRepo>>() {});
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 
     // // curl -i -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer " -H "X-GitHub-Api-Version: 2022-11-28"  https://api.github.com/repos/amfritz/my-github-project-poc/commits
     //
     public List<GitHubRepoCommit> getUserRepoCommits(String userId, String repo) {
         log.info("getUserRepoCommits called");
-        return this.githubRestClient.get()
-                .uri("/repos/{userid}/{repo}/commits", userId, repo)
-                .retrieve()
-                .body(new ParameterizedTypeReference<List<GitHubRepoCommit>>() {});
+
+        var result = new ArrayList<GitHubRepoCommit>();
+        String uri = "/repos/{userid}/{repo}/commits";
+
+        do {
+            ResponseEntity<List<GitHubRepoCommit>> resp = this.githubRestClient.get()
+                    .uri(uri, userId, repo)
+                    .retrieve()
+                    .toEntity(new ParameterizedTypeReference<>() {
+                    });
+
+            var commits = resp.getBody();
+            result.addAll(commits);
+
+            // check headers to see if there's a link for more commits. if so, iterate though the pages
+            if (resp.getHeaders().containsKey(GITHUB_LINK_HEADER)) {
+                String next = null;
+                String[] pageLinks = StringUtils.split(resp.getHeaders().get(GITHUB_LINK_HEADER).getFirst(), ',');
+                for (String s : pageLinks) {
+                    // the links could have rel="first", rel="prev", rel="next", rel="last" sent. only get the next one.
+                    // if no next then we are at the end and break out.
+                    String[] split = StringUtils.split(s, ';');
+                    if (StringUtils.trim(split[1]).equalsIgnoreCase(REL_NEXT)) {
+                        log.info("next link found: {}", split[0]);
+                        next = split[0];
+                    }
+                }
+                if (next ==  null) {
+                    log.info("next link not found, breaking out");
+                    break;
+                }
+                // the url is bracketed by < and > so strip them off
+                uri = StringUtils.strip( next, "<>");
+                log.info("getUserRepoCommits link [{}]", uri);
+            } else {
+                // no link header in response
+                break;
+            }
+        }
+        while(true);
+
+        return result;
     }
 
     public GitHubCreateWebhookResponse createGitHubRepositoryWebHook(String userId, String repository) {
@@ -89,29 +126,6 @@ public class GithubRestClient {
                     .retrieve()
                     .toBodilessEntity();
     }
-
-//    private void logRequest(HttpRequest request, byte[] body) {
-//        log.info("Request: {} {}", request.getMethod(), request.getURI());
-//        //logHeaders(request.getHeaders());
-//        for(var header : request.getHeaders().entrySet()) {
-//            log.info("Response header: {} {}", header.getKey(), header.getValue());
-//        }
-//        if (body != null && body.length > 0) {
-//            log.info("Request body: {}", new String(body, StandardCharsets.UTF_8));
-//        }
-//    }
-//
-//    private void logResponse(HttpRequest request, ClientHttpResponse response) throws IOException {
-//        log.info("Response status: {}", response.getStatusCode());
-//        //logHeaders(response.getHeaders());
-//        for(var header : response.getHeaders().entrySet()) {
-//            log.info("Response header: {} {}", header.getKey(), header.getValue());
-//        }
-//        byte[] responseBody = response.getBody().readAllBytes();
-//        if (responseBody.length > 0) {
-//            log.info("Response body: {}", new String(responseBody, StandardCharsets.UTF_8));
-//        }
-//    }
 
 }
 

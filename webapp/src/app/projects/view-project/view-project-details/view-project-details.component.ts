@@ -1,7 +1,8 @@
-import {Component, input, model, OnInit, output} from '@angular/core';
+import {Component, inject, input, OnInit, output} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {ProjectEntity} from '../../../models/project';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ToastService} from '../../../services/toast.service';
 
 @Component({
     selector: 'app-view-project-details',
@@ -16,12 +17,13 @@ export class ViewProjectDetailsComponent implements OnInit {
     canDelete = input<boolean>(true);
     isArchived = false;
     datePipe = new DatePipe('en-US');
+    toastService = inject(ToastService);
     form = new FormGroup({
         projectName: new FormControl('', {
             validators: [Validators.required]
         }),
         projectDescription: new FormControl('', {
-            validators: [Validators.required, Validators.maxLength(1000)]
+            validators: [ Validators.maxLength(5000)]
         }),
         projectStatus: new FormControl<'active' | 'archived' | ''>(''),
         createdDt: new FormControl({
@@ -48,7 +50,13 @@ export class ViewProjectDetailsComponent implements OnInit {
                 repoHookId: this.project().repo.hookId,
             }
         });
+        if (this.project().status === 'archived') {
+            this.form.controls.projectName.disable();
+            this.form.controls.projectDescription.disable();
+            this.form.controls.projectStatus.disable();
+        }
         this.isArchived = this.project().status === 'archived';
+
     }
 
     onSubmit() {
@@ -69,7 +77,9 @@ export class ViewProjectDetailsComponent implements OnInit {
                 status: this.form.value.projectStatus || this.project().status,
             };
             this.updated.emit(req);
-
+        }
+        else {
+            this.toastService.showToast("Please correct the errors below.", 'error');
         }
     }
 }

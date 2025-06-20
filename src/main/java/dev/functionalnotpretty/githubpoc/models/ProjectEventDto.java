@@ -20,23 +20,4 @@ public record ProjectEventDto(
         String createdDt,
         String updatedDt
         ) {
-
-        public static ProjectEvent toEvent(ProjectEventDto dto) {
-                return new ProjectEvent(dto);
-        }
-
-        public static ProjectEventDto toDto(ProjectEvent e) {
-                return new ProjectEventDto(
-                        e.getId(),
-                        e.getUserId(),
-                        e.getProjectId(),
-                        e.getEventDescription(),
-                        e.getEventDate(),
-                        e.getRepoName(),
-                        e.getBranch_name(),
-                        e.isNewEvent(),
-                        e.getCreatedDt(),
-                        e.getUpdatedDt()
-                );
-        }
 }

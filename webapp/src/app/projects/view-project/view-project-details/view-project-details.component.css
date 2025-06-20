@@ -14,6 +14,17 @@
     justify-content: flex-start;
     gap: 0.5rem;
 }
+
+label {
+    font-weight: bold;
+    vertical-align: top;
+}
+
+input:enabled, textarea,select:enabled {
+    font: inherit;
+    background: white;
+}
+
 button {
     font: inherit;
     cursor: pointer;
@@ -22,7 +33,12 @@ button {
     border-radius: 4px;
     background-color: brown;
     color: white;
-    margin: auto  0.5rem;
+    margin: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.project-actions p {
+    padding: 0 0.3rem;
+    margin: 0.5rem;
 }
 
 .disabled {

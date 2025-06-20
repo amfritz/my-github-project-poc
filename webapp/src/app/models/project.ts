@@ -18,20 +18,3 @@ export interface ProjectEntity {
     createdAt?: string;
     updatedAt?: string;
 }
-
-export function emptyProject(): ProjectEntity {
-    return {
-        userId: '',
-        name: '',
-        description: '',
-        status: '',
-        repo: {
-            id: '',
-            name: '',
-            url: '',
-            hookId: '',
-            isPrivate: false,
-            createdAt: undefined
-        }
-    };
-}

@@ -16,12 +16,23 @@
     width: 80%;
     min-height: 1rem;
     cursor: initial;
+    white-space: pre-wrap;
 }
 
 .new-event {
-    /*border: 1px solid #ccc;*/
-    box-shadow: 0 0 10px #ccc;
-    background: brown;
+    /* border:2px solid chocolate; */
+    box-shadow: 0 0 10px chocolate;
+    font-weight: bold;
+    color:white
+}
+
+.new-event-label {
+    display: inline-block;
+    color: darkgreen;
+    background:  lawngreen;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-variant: small-caps;
 }
 
 .event-actions {
