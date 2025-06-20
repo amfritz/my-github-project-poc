@@ -8,19 +8,24 @@
     <div>
     <h3>Development log <svg (click)="changeSort()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-down-icon lucide-arrow-up-down"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>
     </h3>
-
+    </div>
 <div class="event-list">
     <div class="new-event">
-        <input type="date" [(ngModel)]="newEventDate" />
-        <input type="time" [(ngModel)]="newEventTime" />
-        <textarea cols="75" rows="3" [(ngModel)]="newEventDescription" placeholder="Enter new event description"></textarea>
+        <input [disabled]="!editable()" type="date" [(ngModel)]="newEventDate" />
+        <input [disabled]="!editable()" type="time" [(ngModel)]="newEventTime" />
+        <textarea [disabled]="!editable()" cols="75" rows="3" [(ngModel)]="newEventDescription" placeholder="Enter new event description"></textarea>
         <button  [class.disabled]="!canAdd()" [disabled]="!canAdd()" (click)="onAdd()">Add new event</button>
     </div>
     @for (event of sortedEvents(); track event.id) {
 <!--        @if ($first) {-->
 <!--            <svg (click)="changeSort()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-down-icon lucide-arrow-up-down"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>-->
 <!--        }-->
-        <app-view-project-event [canDelete]="project?.status == 'active'" [event]="event" (delete)="onDelete(event)" (value)="updateEventDesc($event, event)" (visited)="onVisited(event)"/>
-}
+        <app-view-project-event
+            [canDelete]="project?.status == 'active'"
+            [event]="event"
+            [editable]="editable()"
+            (delete)="onDelete(event)"
+            (value)="updateEventDesc($event, event)"
+            (visited)="onVisited(event)"/>
+    }
 </div>
-

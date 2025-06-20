@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { ErrorService } from './error.service';
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {catchError, Observable, tap, throwError} from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {catchError, tap, throwError} from 'rxjs';
 import { ProjectEntity } from '../models/project';
 import { ProjectEvents } from '../models/project-events';
+import {ProjectPostRequest} from '../models/project-post-request';
 
 @Injectable({
   providedIn: 'root'
@@ -38,9 +38,9 @@ export class ProjectsService {
         )
     }
 
-    findProjectById(projectId: string) {
-      return this.loadedProjects().find(p => p.id === projectId);
-    }
+findProjectById(projectId: string) {
+  return this.loadedProjects().find(p => p.id === projectId);
+}
   // so fix this service so it can handle that
   getProjectById(projectId: string) {
       return this.httpClient.get<ProjectEntity>(`${this.baseUrl}/${projectId}`)
@@ -59,20 +59,20 @@ export class ProjectsService {
           )
   }
 
-  createProject(project: ProjectEntity, addCommits: boolean) {
-    return this.httpClient.post<ProjectEntity>(`${this.baseUrl}?add-commits=${addCommits}`,project)
-      .pipe(
-        tap((newProject) => {
-          this.projects.update(() => [...this.projects(), newProject]);
-        }),
-        catchError((error) => {
-          console.log(error);
-          return throwError(
-            () => new Error("error")
-          );
-        })
-      )
-  }
+    createProject(project: ProjectPostRequest) {
+        return this.httpClient.post<ProjectEntity>(`${this.baseUrl}`,project)
+            .pipe(
+                tap((newProject) => {
+                    this.projects.update(() => [...this.projects(), newProject]);
+                }),
+                catchError((error:HttpErrorResponse) => {
+                    console.log(error);
+                    return throwError(
+                        () => new Error("an error occurred trying to create the project" + error.message )
+                    );
+                })
+            )
+    }
 
   updateProject(project: ProjectEntity) {
       return this.httpClient.put<ProjectEntity>(`${this.baseUrl}/${project.id}`, project)
@@ -93,6 +93,22 @@ export class ProjectsService {
           );
   }
 
+  deleteProject(projectId: string) {
+    return this.httpClient.delete(`${this.baseUrl}/${projectId}`)
+      .pipe(
+        tap(() => {
+          this.projects.update(val => val.filter(p => p.id !== projectId));
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.log(error);
+          return throwError(
+            () => new Error(error.message || "error" )
+          );
+        })
+      )
+  }
+
+  // begin events apis
     getProjectEvents(projectId: string) {
       return this.httpClient
         .get<ProjectEvents[]>(`${this.baseUrl}/${projectId}/events`)

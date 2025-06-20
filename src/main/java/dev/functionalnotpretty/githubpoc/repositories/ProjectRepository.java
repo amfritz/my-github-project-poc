@@ -2,7 +2,6 @@ package dev.functionalnotpretty.githubpoc.repositories;
 
 import com.azure.spring.data.cosmos.repository.CosmosRepository;
 import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +16,6 @@ public interface ProjectRepository extends CosmosRepository<ProjectEntity, Strin
 
     boolean existsByRepo_Name(String repoName);
     ProjectEntity findByIdAndProjectId(String id, String projectId);
+
+    void deleteByIdAndProjectId(String id, String projectId);
 }

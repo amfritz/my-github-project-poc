@@ -1,7 +1,7 @@
 <div class="event-item" >
     <div class="event-date">{{ event().eventDate|  date:'short' }}</div>
     <div class="desc"
-         draggable="true"
+         [draggable]="editable()"
          (dblclick)="showEditDialog()"
          (dragstart)="onDragStart($event)"
          (dragover)="onDragOver($event)"
@@ -9,11 +9,11 @@
          (dragend)="onDragEnd($event)"
          [class.new-event]="event().isNewEvent"
          (mouseenter)="onMouseEnter()">
+         @if(event().isNewEvent) {
+        <div class="new-event-label">(new)</div>
+         }
         {{ event().eventDescription }}
     </div>
-<!--    <div class="event-actions">-->
-<!--        <button [disabled]="!canDelete()" (click)="delete.emit()">del</button>-->
-<!--    </div>-->
 
 </div>
 @if(showEdit()) {

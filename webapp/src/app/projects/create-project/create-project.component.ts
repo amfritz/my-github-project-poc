@@ -3,11 +3,12 @@ import { GithubRepoService } from '../../services/github-repo.service';
 import { GitHubRepo } from '../../models/git-hub-repo';
 import { CommitSelectComponent } from "../commit-list/commit-list.component";
 import { GitHubCommit } from '../../models/git-hub-commit';
-import { emptyProject } from '../../models/project';
 import { ProjectsService } from '../../services/projects.service';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {Router} from '@angular/router';
+import {ProjectPostRequest} from '../../models/project-post-request';
+import {ToastService} from '../../services/toast.service';
 
 @Component({
   selector: 'app-create-project',
@@ -23,10 +24,11 @@ export class CreateProjectComponent implements OnInit {
   gitCommits:GitHubCommit[] = [];
   selectedRepo:GitHubRepo|undefined = undefined;
   location = inject(Location);
-  newProject = emptyProject();
+  newProject: ProjectPostRequest = {userId: 'amfritz', name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
   isLoading = false;
   router = inject(Router);
   useCommitList = true;
+  toastService = inject(ToastService);
 
 
   ngOnInit(): void
@@ -58,8 +60,9 @@ export class CreateProjectComponent implements OnInit {
       // currently selected, so unselect it
       this.selectedRepo = undefined;
       this.gitCommits = [];
-      this.newProject = emptyProject();
-      return;
+      this.newProject = {userId: 'amfritz', name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
+
+        return;
     }
 
     // set the selected class on the element
@@ -73,7 +76,6 @@ export class CreateProjectComponent implements OnInit {
     this.newProject.repo.url = repo.html_url;
     this.newProject.userId = 'amfritz'; // todo -- get this from auth service
     this.newProject.description = repo.description;
-    this.newProject.status = 'active';
 
     // the assumption is that commits won't occur while working here, so save api results
     if (this.selectedRepo.commits === undefined) {
@@ -93,10 +95,17 @@ export class CreateProjectComponent implements OnInit {
 
   createProject () {
     // todo -- on success, navigate to new project
-    this.projectService.createProject(this.newProject, this.useCommitList).subscribe( {
+      if (this.useCommitList) {
+          for (let i = 0; i < this.gitCommits.length; i++) {
+              let commit = this.gitCommits[i];
+              this.newProject.events.push({userId: 'amfritz', eventDescription: commit.commit.message, eventDate: commit.commit.author.date,
+                    isNewEvent: true, repoName: this.selectedRepo?.name});
+          }
+      }
+    this.projectService.createProject(this.newProject).subscribe( {
       next: (resp) => this.router.navigate(['/project', resp.projectId]),
-      error: (err ) => console.log(err),
-          })
+      error: (err ) => this.toastService.showToast("An error occurred saving the new item: " + err.toString() , 'error'),
+          });
   }
 
 

@@ -50,7 +50,13 @@ export class ViewProjectDetailsComponent implements OnInit {
                 repoHookId: this.project().repo.hookId,
             }
         });
+        if (this.project().status === 'archived') {
+            this.form.controls.projectName.disable();
+            this.form.controls.projectDescription.disable();
+            this.form.controls.projectStatus.disable();
+        }
         this.isArchived = this.project().status === 'archived';
+
     }
 
     onSubmit() {

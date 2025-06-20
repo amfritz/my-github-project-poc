@@ -14,6 +14,7 @@ import {EditItemComponent} from '../../../shared/edit-item/edit-item.component';
 })
 export class ViewProjectEventComponent {
     event = input.required<ProjectEvents>();
+    editable = input<boolean>(true);
     canDelete = input<boolean>(true);
     delete = output();
     value = output<string>();
@@ -30,6 +31,9 @@ export class ViewProjectEventComponent {
 
 
     showEditDialog() {
+        if (!this.editable()) {
+            return;
+        }
         this.showEdit.set(true);
     }
     updateEventDesc(newDesc:string) {
@@ -70,6 +74,9 @@ export class ViewProjectEventComponent {
     }
 
     onDrop(drop:DragEvent){
+        if(!this.editable()) {
+            return;
+        }
         this.dropTaget = true;
         drop.preventDefault();
         let val = drop.dataTransfer?.getData('text/plain');
@@ -85,7 +92,7 @@ export class ViewProjectEventComponent {
             return;
         }
         this.selfDropFlag = false;
-        let newDesc = this.event().eventDescription + ' ' + dropEvent.eventDescription;
+        let newDesc = this.event().eventDescription + '\n' + dropEvent.eventDescription;
         this.value.emit(newDesc);
     }
 

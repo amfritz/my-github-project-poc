@@ -1,16 +1,13 @@
 li {
-
     cursor: pointer;
 }
 
 .repo-list {
-  display: inline-block;
-  width: 45%;
-vertical-align : top;
+    display: inline-block;
+    width: 45%;
+    vertical-align : top;
     padding: 0;
 }
-
-
 
 .repo-item {
   list-style-type: none;
@@ -28,7 +25,6 @@ label {
     font-weight: bold;
     font-family: inherit;
     margin: 0.5rem;
-
 }
 
 input, textarea {

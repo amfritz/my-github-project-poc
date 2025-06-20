@@ -7,6 +7,8 @@ import dev.functionalnotpretty.githubpoc.entities.ProjectStatus;
 import dev.functionalnotpretty.githubpoc.exceptions.BadRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
 import dev.functionalnotpretty.githubpoc.exceptions.ResourceNotFoundException;
+import dev.functionalnotpretty.githubpoc.models.CreateProjectDto;
+import dev.functionalnotpretty.githubpoc.models.ProjectMapper;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectEventsRepository;
 import dev.functionalnotpretty.githubpoc.repositories.ProjectRepository;
 import dev.functionalnotpretty.githubpoc.restservice.GithubRestClient;
@@ -16,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -44,87 +44,50 @@ public class ProjectService {
 //        return this.projectRepository.findByIdAndProjectId(projectId, projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
     }
 
-    public ProjectEntity createProject(ProjectEntity projectEntity, boolean addCommits) {
-        if (this.projectRepository.existsByRepo_Name(projectEntity.getRepo().name())) {
-            log.info("Project with this repository already exists");
+    public ProjectEntity createProjectWithEvents(CreateProjectDto project) {
+        if (this.projectRepository.existsByRepo_Name(project.repo().name())) {
+            log.info("Project using that repository already exists");
             throw new BadRequestException("Project with this repository already exists");
         }
 
-        if (projectEntity.getStatus() != ProjectStatus.ACTIVE ) {
-            log.info("Invalid project status");
-            throw new BadRequestException("Project status must be active for create");
-        }
-
+        ProjectEntity projectEntity = ProjectMapper.INSTANCE.createProjectDtoToProjectEntity(project);
         var created = Instant.now().toString();
-
         // generate our own id and use the same id for the project id as the partition key
         var uuid = UUID.randomUUID().toString();
+        projectEntity.setStatus(ProjectStatus.ACTIVE);
         projectEntity.setId(uuid);
         projectEntity.setProjectId(uuid);
         projectEntity.setCreatedAt(created);
         projectEntity.setUpdatedAt(created);
 
+        var createdProject = this.projectRepository.save(projectEntity);
 
-        // if not populating project with the commit message, write the object and return
-        if (!addCommits) {
-            var result = projectRepository.save(projectEntity);
-            log.info("added item {}", result);
-            return result;
+        List<ProjectEvent> events = ProjectMapper.INSTANCE.projectDtoListToProjectEntityList(project.events());
+        for (ProjectEvent event : events) {
+            // todo validate the event
+            event.setProjectId(createdProject.getId());
+            event.setCreatedDt(created);
+            event.setUpdatedDt(created);
+            event.setNewEvent(true);
         }
 
-        if (Objects.equals(projectEntity.getRepo().name(), "")) {
-            log.info("bad request, repository name is empty");
-            throw new BadRequestException("No repository specified to get commits from.");
-        }
+        this.eventsRepository.saveAll(events);
 
-        // create the webhook subscription now.
-        var resp = this.githubRestClient.createGitHubRepositoryWebHook(projectEntity.getUserId(), projectEntity.getRepo().name());
+        var resp = this.githubRestClient.createGitHubRepositoryWebHook(createdProject.getUserId(), createdProject.getRepo().name());
         log.info("created webhook response {} ", resp);
         //projectEntity.getRepo().
         ProjectRepo newRepo = new ProjectRepo(projectEntity.getRepo().id(), projectEntity.getRepo().name(), projectEntity.getRepo().url(),
                 projectEntity.getRepo().isPrivate(), projectEntity.getRepo().createdAt(), Long.toString(resp.id()));
-        projectEntity.setRepo(newRepo);
-
-        var items = createCommits(projectEntity.getProjectId(), projectEntity.getUserId(), projectEntity.getRepo().name());
-        var result = projectRepository.save(projectEntity);
-        // cosmos doesn't have cross container transactions, so if a write fails here not much to do about it now
-        this.eventsRepository.saveAll(items);
-
-        log.info("wrote new project item and {} event messages", items.size());
-
-        return result;
-    }
-
-    private List<ProjectEvent> createCommits(String projectId, String userId, String repoName) {
-        var commits = githubRestClient.getUserRepoCommits(userId, repoName);
-        if (commits == null) {
-            // at this point the project entity is written
-            log.info( "read commits are null from github");
-            throw new GitRequestException("Could not read commits from github");
-        }
-
-        log.info( "read {} commit messages from github", commits.size());
-        var events = new ArrayList<ProjectEvent>();
-        for (var commit : commits) {
-            try {
-                var created = Instant.now().toString();
-                var event = new ProjectEvent(userId, projectId,
-                        commit.getCommit().get("message").asText(),
-                        commit.getCommit().get("author").get("date").asText(),
-                        repoName, "", true, created, created);
-                events.add(event);
-            }
-            catch (Exception e) {
-                log.error("processing commit error occurred: {}, exception: {}", commit, e.getMessage());
-                throw new GitRequestException("an error occurred while reading commit messages from github");
-            }
-        }
-        return events;
+        createdProject.setRepo(newRepo);
+        this.projectRepository.save(createdProject);
+        return createdProject;
     }
 
     public ProjectEntity updateProject(ProjectEntity projectEntity) {
-        var project = this.projectRepository.findById(projectEntity.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        var project = this.projectRepository.findByIdAndProjectId(projectEntity.getId(), projectEntity.getProjectId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project not found");
+        }
 
         if (project.getStatus() == ProjectStatus.ARCHIVED) {
             log.error("Attempt to update an archived project {}", project);
@@ -161,7 +124,10 @@ public class ProjectService {
     }
 
     public void deleteProject(String projectId) {
-        var project = this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        var project = this.projectRepository.findByIdAndProjectId(projectId, projectId);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project not found");
+        }
 
         // cascading deletes
         this.eventsRepository.deleteByProjectId(projectId);
@@ -178,7 +144,7 @@ public class ProjectService {
                 throw new GitRequestException("failed to delete webhook in ");
             }
         }
-        this.projectRepository.deleteById(projectId);
+        this.projectRepository.deleteByIdAndProjectId(projectId, projectId);
     }
 
     public List<ProjectEvent> getAllProjectEvents(String projectId) {
