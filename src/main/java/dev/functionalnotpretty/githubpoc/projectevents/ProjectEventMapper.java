@@ -1,6 +1,5 @@
-package dev.functionalnotpretty.githubpoc.models;
+package dev.functionalnotpretty.githubpoc.projectevents;
 
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

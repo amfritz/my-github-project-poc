@@ -1,7 +1,6 @@
-package dev.functionalnotpretty.githubpoc.repositories;
+package dev.functionalnotpretty.githubpoc.project;
 
 import com.azure.spring.data.cosmos.repository.CosmosRepository;
-import dev.functionalnotpretty.githubpoc.entities.ProjectEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

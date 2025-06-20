@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.githubpoc.entities;
+package dev.functionalnotpretty.githubpoc.project;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.azure.spring.data.cosmos.core.mapping.PartitionKey;

@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.githubpoc.entities;
+package dev.functionalnotpretty.githubpoc.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

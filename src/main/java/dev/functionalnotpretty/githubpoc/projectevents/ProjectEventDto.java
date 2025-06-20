@@ -1,6 +1,5 @@
-package dev.functionalnotpretty.githubpoc.models;
+package dev.functionalnotpretty.githubpoc.projectevents;
 
-import dev.functionalnotpretty.githubpoc.entities.ProjectEvent;
 import jakarta.validation.constraints.NotEmpty;
 
 public record ProjectEventDto(

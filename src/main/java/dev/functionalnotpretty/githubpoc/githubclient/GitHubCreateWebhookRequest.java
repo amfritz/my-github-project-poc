@@ -1,4 +1,4 @@
-package dev.functionalnotpretty.githubpoc.entities;
+package dev.functionalnotpretty.githubpoc.githubclient;
 
 public record GitHubCreateWebhookRequest(
         String name,
