@@ -2,7 +2,6 @@
 export interface ProjectEntity {
     id?: string;
     projectId?: string;
-    userId: string;
     name: string;
     description: string;
     status: 'archived' | 'active' | '';

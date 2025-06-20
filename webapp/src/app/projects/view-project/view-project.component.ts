@@ -91,7 +91,7 @@ export class ViewProjectComponent implements OnInit {
         let dateSt = this.datePipe.transform(new Date(this.newEventDate() + 'T' + this.newEventTime()), 'yyyy-MM-ddTHH:mm:ss.SSSZ') || '';
         let evt: ProjectEvents = {
             id: '', eventDescription: this.newEventDescription(), projectId: this.projectId(), eventDate: dateSt,
-            userId: 'amfritz', repoName: this.project?.repo.name || '',
+            repoName: this.project?.repo.name || '',
         }
         console.log('new event: ', evt);
         this.projectService.createProjectEvent(evt).subscribe({

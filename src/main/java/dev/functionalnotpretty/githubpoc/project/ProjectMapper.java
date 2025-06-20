@@ -25,6 +25,4 @@ public interface ProjectMapper {
     @Mapping(target = "createdAt", ignore = true)
     ProjectEntity createProjectDtoToProjectEntity(CreateProjectDto create);
 
-    List<ProjectEvent> projectDtoListToProjectEntityList(List<ProjectEventDto> events);
-
 }
