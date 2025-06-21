@@ -40,8 +40,8 @@
 
     </fieldset>
     <div class="project-actions">
-        <button [disabled]="isArchived" [class.disabled]="isArchived" type="submit">Save Project</button>
-        <button [disabled]="!isArchived" [class.disabled]="!isArchived" (click)="delete.emit()" type="button">Delete project</button>
+        <button [disabled]="isArchived()" [class.disabled]="isArchived()" type="submit">Save Project</button>
+        <button [disabled]="!isArchived()" [class.disabled]="!isArchived()" (click)="delete.emit()" type="button">Delete project</button>
         <p>An archived project cannot be updated anymore. A project can only be deleted after it is archived.</p>
     </div>
 </form>
