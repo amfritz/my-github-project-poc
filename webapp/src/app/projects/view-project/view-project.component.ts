@@ -22,10 +22,10 @@ export class ViewProjectComponent implements OnInit {
     isLoading = signal<boolean>(false);
 
     router = inject(Router);
-    editable = computed(() => this.project?.status === 'active');
+    status = signal<string>('');
+    editable = computed(() => this.status() === 'active');
 
     // TODO -- refactor this component.
-    // edit is false after loading from the url.
     // something for the delete action
 
     ngOnInit(): void {
@@ -33,12 +33,14 @@ export class ViewProjectComponent implements OnInit {
         this.project = this.projectService.findProjectById(this.projectId()) || null;
         if (this.project) {
             this.savedProject.set({ ...this.project });
+            this.status.set(this.project.status);
         } else {
             this.projectService.getProjectById(this.projectId()).subscribe({
                 next: (resp) => {
                     console.log('project: ', resp);
                     this.project = { ...resp };
                     this.savedProject.set({ ...resp });
+                    this.status.set(resp.status);
                 },
                 error: (err) => this.toastService.showToast("An error occurred: " + err.toString(), 'error'),
             });
@@ -61,6 +63,7 @@ export class ViewProjectComponent implements OnInit {
             next: (resp) => {
                 this.savedProject.set({ ...resp });
                 this.project = { ...resp };
+                this.status.set(resp.status);
                 this.toastService.showToast("Save successful.", 'success');
             },
             error: (err) => console.log('error', err)

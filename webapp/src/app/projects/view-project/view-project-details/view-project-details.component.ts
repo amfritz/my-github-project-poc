@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, output} from '@angular/core';
+import {Component, computed, inject, input, OnInit, output, effect} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {ProjectEntity} from '../../../models/project';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -15,7 +15,7 @@ export class ViewProjectDetailsComponent implements OnInit {
     updated = output<ProjectEntity>();
     delete = output();
     canDelete = input<boolean>(true);
-    isArchived = false;
+    isArchived = computed(() => this.project().status === 'archived');
     datePipe = new DatePipe('en-US');
     toastService = inject(ToastService);
     form = new FormGroup({
@@ -38,6 +38,14 @@ export class ViewProjectDetailsComponent implements OnInit {
 
     });
 
+    formEffect = effect( () => {
+        if (this.project().status === 'archived') {
+            this.form.controls.projectName.disable();
+            this.form.controls.projectDescription.disable();
+            this.form.controls.projectStatus.disable();
+        }
+    });
+
     ngOnInit(): void {
         this.form.patchValue({
             projectName: this.project().name,
@@ -55,7 +63,6 @@ export class ViewProjectDetailsComponent implements OnInit {
             this.form.controls.projectDescription.disable();
             this.form.controls.projectStatus.disable();
         }
-        this.isArchived = this.project().status === 'archived';
 
     }
 
