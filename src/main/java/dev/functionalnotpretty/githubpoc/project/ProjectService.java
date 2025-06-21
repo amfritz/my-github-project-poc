@@ -113,6 +113,7 @@ public class ProjectService {
         // todo -- maybe partial entity updates from FE?
         // todo -- trusting the client too much?
         projectEntity.setUpdatedAt(Instant.now().toString());
+        projectEntity.setUserId("amfritz");         // refactor to get this from user session
         return ProjectMapper.INSTANCE.projectToProjectDto( projectRepository.save(projectEntity));
     }
 

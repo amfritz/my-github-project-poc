@@ -18,7 +18,8 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
       this.projects = this.projectService.loadedProjects();
-      if (this.projects.length === 0) {
+      // if (this.projects.length === 0) {
+      if (!this.projectService.isInialized() || this.projects.length === 0) {
         this.isLoading = true;
         this.projectService.getProjects().subscribe({
           next: (resp) => {

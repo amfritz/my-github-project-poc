@@ -15,10 +15,17 @@ export class ProjectsService {
 
   private projects = signal<ProjectEntity[]>([]);
   loadedProjects = this.projects.asReadonly();
+  private initialized = false;
+
 
   constructor() { }
 
+    isInialized() {
+        return this.initialized;
+    }
+
   getProjects() {
+      this.initialized = true;
       return this.httpClient
         .get<ProjectEntity[]>(this.baseUrl)
         .pipe(
