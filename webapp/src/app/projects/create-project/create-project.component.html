@@ -1,6 +1,9 @@
 <h3>Select a repository to create a project from it</h3>
-@if (isLoading) {
-    <p>Loading repositories...</p>
+@if (isLoading()) {
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p>Creating project...</p>
+    </div>
 } @else {
 
 <div class="repo-list">

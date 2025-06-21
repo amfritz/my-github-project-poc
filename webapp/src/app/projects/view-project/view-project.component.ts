@@ -7,11 +7,11 @@ import { ViewProjectEventComponent } from './view-project-event/view-project-eve
 import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import {AddEventComponent, NewEvent} from './add-event/add-event.component';
 
 @Component({
     selector: 'app-view-project',
-    imports: [ViewProjectDetailsComponent, ViewProjectEventComponent, RouterLink, FormsModule],
+    imports: [ViewProjectDetailsComponent, ViewProjectEventComponent, RouterLink, FormsModule, AddEventComponent],
     templateUrl: './view-project.component.html',
     styleUrl: './view-project.component.css'
 })
@@ -31,17 +31,13 @@ export class ViewProjectComponent implements OnInit {
         }
     });
     toastService = inject(ToastService);
-    newEventDescription = signal<string>('');
-    newEventDate = signal<string>('');
-    newEventTime = signal<string>('');
-    canAdd = computed(() => this.newEventDescription().length > 0);
-    datePipe = new DatePipe('en-US');
+    isLoading = signal<boolean>(false);
+
     router = inject(Router);
     editable = computed(() => this.project?.status === 'active');
 
-    // TODO -- refactor this component. 
+    // TODO -- refactor this component.
     // edit is false after loading from the url.
-    // create a new component to create a new item
     // something for the delete action
 
     ngOnInit(): void {
@@ -59,63 +55,16 @@ export class ViewProjectComponent implements OnInit {
                 error: (err) => this.toastService.showToast("An error occurred: " + err.toString(), 'error'),
             });
         }
-        if (this.project === null) {
-
-        } else {
-
-        }
 
         // the project id is a path parameter, so it will be set
         this.projectService.getProjectEvents(this.projectId()).subscribe({
             next: (resp) => this.events.set(resp),
             error: (err) => console.log('error', err)
         });
-
-        this.initNewDate();
-    }
-
-    initNewDate() {
-        this.newEventDate.set(this.datePipe.transform(new Date(), 'YYYY-MM-dd') || '');
-        this.newEventTime.set(this.datePipe.transform(new Date(), 'HH:mm') || '');
     }
 
     changeSort() {
         this.sort.set(this.sort() === 'asc' ? 'desc' : 'asc');
-    }
-
-
-    onAdd() {
-        // console.log('add new event');
-
-        // create iso string
-        let dateSt = this.datePipe.transform(new Date(this.newEventDate() + 'T' + this.newEventTime()), 'yyyy-MM-ddTHH:mm:ss.SSSZ') || '';
-        let evt: ProjectEvents = {
-            id: '', eventDescription: this.newEventDescription(), projectId: this.projectId(), eventDate: dateSt,
-            repoName: this.project?.repo.name || '',
-        }
-        console.log('new event: ', evt);
-        this.projectService.createProjectEvent(evt).subscribe({
-            next: (resp) => {
-                this.events.update(val => [...val, resp]);
-                this.newEventDescription.set('');
-                this.initNewDate();
-                this.toastService.showToast("Save successful.", 'success');
-            },
-            error: (err) => this.toastService.showToast("An error occurred saving the new item: " + err.toString(), 'error'),
-        })
-        //
-    }
-
-    onDelete(event: ProjectEvents) {
-        // alert('delete: ' + eventId);
-        if (event.id === '') {
-            this.events.update(val => val.filter(e => e.id !== event.id));
-            return;
-        }
-        this.projectService.deleteProjectEvent(event.projectId, event.id).subscribe({
-            next: () => this.events.update(val => val.filter(e => e.id !== event.id)),
-            error: (err) => console.log('error', err)
-        });
     }
 
     handleSubmit(newProject: ProjectEntity) {
@@ -124,7 +73,6 @@ export class ViewProjectComponent implements OnInit {
             return;
         }
 
-        // console.log('submit: ', newProject);
         if (newProject.status === 'archived' && this.savedProject()?.status === 'active') {
             if (!confirm('Status is set to archive, are you sure you want to archive this project?')) {
                 return;
@@ -144,9 +92,11 @@ export class ViewProjectComponent implements OnInit {
     onDeleteProject() {
         if (confirm('Are you sure you want to delete this project?')) {
             console.log('delete project');
+            this.isLoading.set(true);
             this.projectService.deleteProject(this.projectId()).subscribe({
                 next: () => {
                     this.toastService.showToast("Delete successful.", 'success');
+                    this.isLoading.set(false);
                     this.router.navigate(['/']).then();
                 },
                 error: (err) => {
@@ -157,22 +107,42 @@ export class ViewProjectComponent implements OnInit {
         }
     }
 
-    updateEventDesc(value: string, event: ProjectEvents) {
-        if (value === '') {
-            // delete it
-            // todo -- add confirm delete
-        } else {
-            // create a copy of the object and only update it in the list if the update is successful
-            let req = { ...event };
-            req.eventDescription = value;
-            this.updateEvent(req);
-        }
-    }
-
+    // event component handlers below
+    // set new event to not new once visited.
     onVisited(eventProject: ProjectEvents) {
         let req = { ...eventProject };
         req.isNewEvent = false;
         this.updateEvent(req, false);
+    }
+
+    // add a user created event
+    onAddEvent(newEvent: NewEvent) {
+        let evt: ProjectEvents = {
+            id: '', eventDescription: newEvent.description, projectId: this.projectId(), eventDate: newEvent.date, isNewEvent: true,
+            repoName: this.project?.repo.name || '',
+        }
+        // console.log('new event: ', evt);
+        this.projectService.createProjectEvent(evt).subscribe({
+            next: (resp) => {
+                this.events.update(val => [...val, resp]);
+                this.toastService.showToast("Save successful.", 'success');
+            },
+            error: (err) => this.toastService.showToast("An error occurred saving the new item: " + err.toString(), 'error'),
+        })
+    }
+
+    updateEventDesc(value: string, event: ProjectEvents) {
+        // create a copy of the object and only update it in the list if the update is successful
+        let req = { ...event };
+        req.eventDescription = value;
+        this.updateEvent(req);
+    }
+
+    onDeleteEvent(event: ProjectEvents) {
+        this.projectService.deleteProjectEvent(event.projectId, event.id).subscribe({
+            next: () => this.events.update(val => val.filter(e => e.id !== event.id)),
+            error: (err) => console.log('error', err)
+        });
     }
 
     private updateEvent(event: ProjectEvents, showToast: boolean = true) {

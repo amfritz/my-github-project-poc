@@ -1,44 +1,12 @@
 .event-list {
-
     /*align-items: center;*/
     margin: 0.5rem auto;
     width: 80%;
     /*height: 100vh;*/
 }
-.new-event {
-    position: sticky;
-    top: 0;
-    background: bisque;
-    margin: auto;
-    padding: 0.5rem;
-}
-.new-event > * {
-    display: inline-block;
-    margin: 0.2rem;
-    padding: 0.2rem;
-    vertical-align: top;
-}
 
-.project-actions {
-    margin: 0.5rem;
-    padding: 0.2rem;
-}
 p {
     padding: 0 0.3rem;
     margin: 0.5rem;
 }
-button {
-    font: inherit;
-    cursor: pointer;
-    border: none;
-    padding: 0.3rem 0.3rem;
-    border-radius: 4px;
-    background-color: brown;
-    color: white;
-    margin: auto  0.5rem;
-}
-.disabled {
-    background-color: bisque;
-    color: darkgray;
-    cursor: not-allowed;
-}
+

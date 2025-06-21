@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { GithubRepoService } from '../../services/github-repo.service';
 import { GitHubRepo } from '../../models/git-hub-repo';
 import { CommitSelectComponent } from "../commit-list/commit-list.component";
@@ -25,7 +25,7 @@ export class CreateProjectComponent implements OnInit {
   selectedRepo:GitHubRepo|undefined = undefined;
   location = inject(Location);
   newProject: ProjectPostRequest = {name: '', description: '', repo: { name: '', id: '', url: '', isPrivate: false, createdAt:''}, events: []};
-  isLoading = false;
+  isLoading = signal<boolean>(false);
   router = inject(Router);
   useCommitList = true;
   toastService = inject(ToastService);
@@ -34,18 +34,18 @@ export class CreateProjectComponent implements OnInit {
   ngOnInit(): void
   {
     // todo -- need a pretty isloading
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.githubService.getUserRepos().subscribe({
         next: (resp) => {
           this.loadRepos(resp);
-          this.isLoading = false;
+          this.isLoading.set(false);
           if (this.gitRepos.length > 0) {
               this.selectRepo(this.gitRepos[0]);
           }
         },
         error: (err) => {
           console.log('error', err);
-          this.isLoading = false;
+            this.isLoading.set(false);
         }
       });
   }
@@ -101,8 +101,12 @@ export class CreateProjectComponent implements OnInit {
                     isNewEvent: true, repoName: this.selectedRepo?.name});
           }
       }
-    this.projectService.createProject(this.newProject).subscribe( {
-      next: (resp) => this.router.navigate(['/project', resp.projectId]),
+      this.isLoading.set(true);
+        this.projectService.createProject(this.newProject).subscribe( {
+      next: (resp) => {
+          this.router.navigate(['/project', resp.projectId]);
+          this.isLoading.set(false);
+      },
       error: (err ) => this.toastService.showToast("An error occurred saving the new item: " + err.toString() , 'error'),
           });
   }
