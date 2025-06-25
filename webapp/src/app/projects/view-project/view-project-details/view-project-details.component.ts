@@ -38,6 +38,7 @@ export class ViewProjectDetailsComponent implements OnInit {
 
     });
 
+    // the editor says this is unused, but it is not, it is called by angular and is needed to update the form state
     formEffect = effect( () => {
         if (this.project().status === 'archived') {
             this.form.controls.projectName.disable();

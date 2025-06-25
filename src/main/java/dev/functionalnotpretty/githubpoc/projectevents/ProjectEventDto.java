@@ -11,8 +11,6 @@ public record ProjectEventDto(
         String eventDescription,
         @NotEmpty(message = "The event date cannot be empty")
         String eventDate,
-        String repoName,
-        String branchName,
         boolean isNewEvent,
         String createdDt,
         String updatedDt

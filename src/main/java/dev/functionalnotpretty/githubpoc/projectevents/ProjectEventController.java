@@ -51,18 +51,6 @@ public class ProjectEventController {
         return this.projectService.updateProjectEvent(projectEventDto);
     }
 
-//    @PutMapping
-//    public List<ProjectEventDto> bulkUpdateProjectMessages(@Valid @PathVariable String projectId, @RequestBody List<ProjectEventDto> events) {
-//        log.info("add {} ProjectMessages in projects api for {}", events.size(), projectId);
-//        var result = this.projectService.updateProjectEvents(projectId, events.stream()
-//                .map(ProjectEventMapper.INSTANCE::projectEventDtoToProjectEvent)
-//                .toList()
-//        );
-//        return result.stream()
-//                .map(ProjectEventMapper.INSTANCE::projectEventToProjectEventDto)
-//                .toList();
-//    }
-
     @DeleteMapping("{eventId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProjectMessages(@PathVariable String projectId, @PathVariable String eventId) {
