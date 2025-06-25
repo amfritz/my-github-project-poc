@@ -19,8 +19,6 @@ public class ProjectEvent {
     private String userId;
     private String eventDescription;
     private String eventDate;
-    private String repoName;
-    private String branch_name;
     private boolean isNewEvent;
     private String createdDt;       // todo -- this isn't going to work like i think it will work. ne
     private String updatedDt;
@@ -28,14 +26,12 @@ public class ProjectEvent {
     public ProjectEvent() {
     }
 
-    public ProjectEvent(String userId, String projectId, String eventDescription, String eventDate, String repoName, String branch_name, boolean isNewEvent,
+    public ProjectEvent(String userId, String projectId, String eventDescription, String eventDate, boolean isNewEvent,
                         String createdDt, String updatedDt) {
         this.userId = userId;
         this.projectId = projectId;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
-        this.repoName = repoName;
-        this.branch_name = branch_name;
         this.isNewEvent = isNewEvent;
         this.createdDt = createdDt;
         this.updatedDt = updatedDt;

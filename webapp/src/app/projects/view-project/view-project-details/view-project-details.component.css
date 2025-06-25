@@ -46,3 +46,7 @@ button {
     color: darkgray;
     cursor: not-allowed;
 }
+
+.help {
+    font-size: 0.8rem;
+}

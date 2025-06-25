@@ -3,8 +3,6 @@ export interface ProjectEvents {
     projectId: string;
     eventDescription: string;
     eventDate: string;
-    repoName?: string;
-    branch_name?: string;
     isNewEvent?: boolean;
     createdDt?: string;
     updatedDt?: string;

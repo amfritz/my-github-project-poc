@@ -79,7 +79,6 @@ public class GitHubWebhookService {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode pushEvent = mapper.readTree(body);
-            var branchName = pushEvent.get("ref").asText().split("/")[2];
             var repositoryName = pushEvent.get("repository").get("name").asText();
             var project = this.projectRepository.findByRepo_Name(repositoryName);
 
@@ -94,7 +93,7 @@ public class GitHubWebhookService {
                 var event = new ProjectEvent("amfritz", project.getProjectId(),
                         commit.get("message").asText(),
                         commit.get("timestamp").asText(),
-                        repositoryName, branchName, true, created, created);
+                         true, created, created);
                 events.add(event);
             }
 

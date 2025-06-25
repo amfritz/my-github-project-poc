@@ -4,6 +4,7 @@ import {catchError, tap, throwError} from 'rxjs';
 import { ProjectEntity } from '../models/project';
 import { ProjectEvents } from '../models/project-events';
 import {ProjectPostRequest} from '../models/project-post-request';
+import {ResolveFn} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -165,3 +166,8 @@ findProjectById(projectId: string) {
     }
 
 }
+
+export const projectResolver: ResolveFn<ProjectEntity> = (route, state) => {
+  const projectId = route.params['id'];
+  return inject(ProjectsService).getProjectById(projectId);
+};
