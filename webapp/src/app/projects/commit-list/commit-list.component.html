@@ -1,7 +1,4 @@
 <h2>Commit Messages</h2>
-@if (commits !== undefined) {
-    @for(commit of commits(); track commit.node_id ) {
-        <div><strong>{{ commit.commit.author.date |date: 'short' }}:</strong> {{commit.commit.message }}  </div>
-    }
-
+@for(commit of commits(); track commit.node_id ) {
+    <div><strong>{{ commit.commit.author.date |date: 'short' }}:</strong> {{commit.commit.message }}  </div>
 }

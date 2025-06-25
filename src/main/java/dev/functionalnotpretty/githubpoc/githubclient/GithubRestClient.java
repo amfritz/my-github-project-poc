@@ -1,6 +1,7 @@
 package dev.functionalnotpretty.githubpoc.githubclient;
 
 import dev.functionalnotpretty.githubpoc.exceptions.GitRequestException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -17,6 +18,7 @@ public class GithubRestClient {
 
     private final static String GITHUB_BASE_URL = "https://api.github.com";
     private final static String token = System.getenv("GITHUB_TOKEN");
+    private final static boolean webHookSSL = StringUtils.equalsIgnoreCase( System.getenv("GITHUB_WEBHOOK_SSL"), "true");
 
     public final static String GITHUB_LINK_HEADER = "Link";
     public final static String REL_NEXT = "rel=\"next\"";
@@ -63,7 +65,7 @@ public class GithubRestClient {
     public GitHubCreateWebhookResponse createGitHubRepositoryWebHook(String userId, String repository) {
         log.info("createGitHubRepositoryWebHook called");
         var request = new GitHubCreateWebhookRequest(
-                "web", new GitHubWebhookConfig(System.getenv("GITHUB_WEBHOOK_URL"), "json", System.getenv("GITHUB_SECRET"),"1"),
+                "web", new GitHubWebhookConfig(System.getenv("GITHUB_WEBHOOK_URL"), "json", System.getenv("GITHUB_SECRET"), webHookSSL ? "0" : "1"),
                 new String[] {"push"}, true);
         return this.githubRestClient.post()
                 .uri("/repos/{userId}/{repository}/hooks", userId, repository)

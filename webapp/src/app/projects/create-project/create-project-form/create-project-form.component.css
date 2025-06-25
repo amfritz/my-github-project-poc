@@ -1,21 +1,10 @@
 
-.create-project {
-    display: flex;
-}
-
-
-
-
-.project-form {
-    overflow: hidden;
-}
-
-
-
 label {
     font-weight: bold;
     font-family: inherit;
     margin: 0.5rem;
+    vertical-align: top;
+    padding: 0.5rem;
 }
 
 input, textarea {

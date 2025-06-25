@@ -15,16 +15,4 @@ import {DatePipe} from '@angular/common';
 export class CommitSelectComponent  {
   commits = input.required<GitHubCommit[]>();
 
-  //stuff = resource( this.repoName() , )
-
-  // ngOnInit(): void {
-  //     this.githubService.getRepoCommits(this.repoName()).subscribe({
-  //         next: (resp) => {
-  //           this.commits = resp;
-  //           //console.log(this.commits);
-  //         },
-  //         error: (err) => console.log('error', err)
-  //       });
-  // }
-
 }

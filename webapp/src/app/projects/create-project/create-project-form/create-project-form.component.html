@@ -1,0 +1,22 @@
+<div class="project-form">
+    <div>
+        <label for="projectName">Project name:</label>
+        <input type="text" id="projectName" placeholder="Enter project name" [(ngModel)]="name"/>
+    </div>
+    <div>
+        <label for="projectDescription">Project description:</label>
+        <textarea cols="50" rows="3" id="projectDescription" placeholder="Enter project description"
+                  [(ngModel)]="description"></textarea>
+    </div>
+    <div>
+        <input type="checkbox" id="chk-events" name="chk-events" value="events" [checked]="useCommits()"
+               (change)="useCommits.set(!useCommits())"/>
+        <label for="chk-events">Use commits messages to create initial project events</label>
+    </div>
+</div>
+
+<p>
+    <!-- if no repos, then use a class to make the project button disabled -->
+    <button (click)="createProject()" [disabled]="name() ===''|| !canCreate()">create a new project</button>
+    <button (click)="cancel.emit()">Cancel</button>
+</p>

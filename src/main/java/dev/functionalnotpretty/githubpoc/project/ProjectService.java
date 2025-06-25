@@ -37,7 +37,10 @@ public class ProjectService {
     }
 
     public ProjectDto getProject(String projectId) {
-        var result = this.projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        var result = this.projectRepository.findByIdAndProjectId(projectId, projectId);
+        if (result == null) {
+            throw new ResourceNotFoundException("Project not found");
+        }
         return ProjectMapper.INSTANCE.projectToProjectDto(result);
     }
 
