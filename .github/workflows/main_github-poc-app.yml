@@ -25,14 +25,8 @@ jobs:
           java-version: '21'
           distribution: 'microsoft'
 
-      - name: Make Node binary executable (workaround for frontend-maven-plugin)
-        run: |
-          if [ -f ./webapp/node/node ]; then
-            chmod +x ./webapp/node/node
-          fi
-
       - name: Build with Maven
-        run: mvn clean install -X -DskipTests
+        run: sudo mvn clean install -X -DskipTests
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
