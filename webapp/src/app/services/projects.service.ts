@@ -21,7 +21,7 @@ export class ProjectsService {
 
   constructor() { }
 
-    isInialized() {
+    isInitialized() {
         return this.initialized;
     }
 

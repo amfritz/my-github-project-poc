@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ProjectsService } from '../services/projects.service';
 import { ProjectEntity } from '../models/project';
 import { RouterLink } from '@angular/router';
-import { CommitSelectComponent } from "./commit-list/commit-list.component";
 
 @Component({
   selector: 'app-watched-repos',
@@ -13,13 +12,12 @@ import { CommitSelectComponent } from "./commit-list/commit-list.component";
 export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectsService);
   projects: ProjectEntity[] = [];
-  selectedRepoName ='';
   isLoading = false;
 
   ngOnInit(): void {
       this.projects = this.projectService.loadedProjects();
       // if (this.projects.length === 0) {
-      if (!this.projectService.isInialized() || this.projects.length === 0) {
+      if (!this.projectService.isInitialized() || this.projects.length === 0) {
         this.isLoading = true;
         this.projectService.getProjects().subscribe({
           next: (resp) => {
@@ -34,7 +32,4 @@ export class ProjectsComponent implements OnInit {
       }
   }
 
-  showCommits(project:ProjectEntity) {
-    this.selectedRepoName = project.repo.name;
-  }
 }
