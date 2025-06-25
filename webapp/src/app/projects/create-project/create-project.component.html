@@ -2,50 +2,30 @@
 @if (isLoading()) {
     <div class="spinner-container">
         <div class="spinner"></div>
-        <p>Creating project...</p>
+        <p>{{ loadingMessage }}</p>
     </div>
 } @else {
+    <app-create-project-form
+        [name]="projectName()"
+        [description]="projectDescription()"
+        [canCreate]="selectedRepo() !== undefined"
+        (save)="createProject($event)"
+        (cancel)="cancelNavigation()"/>
+    <div class="create-project">
+            @if (gitRepos().length > 0) {
+                <app-select-repository [repositories]="gitRepos()" (selected)="selectRepo($event)"/>
+            } @else {
+                <p>You don't have any repositories to create a project off of.</p>
+            }
+            @if (gitCommits().length > 0) {
 
-<div class="repo-list">
-     <h2>Available Repositories</h2>
-    <p>Select a repository to initialize a project with.</p>
-@if (gitRepos !== undefined) {
-    <ul>
-    @for(repo of gitRepos; track repo.id ) {
-        <li [id]="repo.name" (click)="selectRepo(repo)" class="repo-item" [class.selected]="selectedRepo?.name===repo.name">{{repo.name }}, {{ repo.description }}, it is private: {{ repo.isPrivate ? 'true' : 'false' }} </li>
-    }
-    </ul>
-}
-@else {
-    <p>No repositories available, create a new project.</p>
-}
+                <app-commit-list [commits]="gitCommits()"/>
+            } @else {
+                <div></div>
+            }
+    </div>
 
-  <div class="project-form">
-    <div>
-        <label for="projectName">Project name:</label>
-        <input type="text" id="projectName" placeholder="Enter project name" [(ngModel)]="newProject.name" />
-    </div>
-    <div>
-        <label for="projectDescription">Project description:</label>
-        <textarea cols="50" rows="5" id="projectDescription" placeholder="Enter project description"  [(ngModel)]="newProject.description"></textarea>
-    </div>
-    <div>
-        <input type="checkbox" id="chk-events" name="chk-events" value="events" [checked]="useCommitList" (change)="useCommitList = !useCommitList"/>
-        <label for="chk-events">Use commits messages to create initial project events</label>
-    </div>
-  </div>
 
-  <p>
-    <!-- if no repos, then use a class to make the project button disabled -->
-        <button (click)="createProject()" [disabled]="selectedRepo === undefined">create a new project</button>
-        <button (click)="location.back()">Cancel</button>
-    </p>
-    </div>
- <div class="commit-list">
-@if (gitCommits !== undefined) {
-    <app-commit-list [commits]="gitCommits" />
-}
-</div>
 }
 
 <!-- todo for diffenent create options

@@ -1,3 +1,20 @@
-div {
-    margin: 0.5rem;
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+    align-content: space-between;
 }
+
+/*.commit-item {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    padding: 0.5rem;*/
+/*}*/
+
+/*.commit-date {*/
+/*    padding: 0.5rem;*/
+/*    font-weight: bold;*/
+/*    flex: 0 0 auto;*/
+/*}*/
+

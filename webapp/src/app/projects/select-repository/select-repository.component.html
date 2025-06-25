@@ -1,0 +1,9 @@
+<h2>Available Repositories</h2>
+<ul class="repo-list">
+    @for (repo of repositories(); track repo.id) {
+        <li [id]="repo.name" (click)="selectRepo(repo)" class="repo-item"
+            [class.selected]="selectedRepo()?.name===repo.name">{{ repo.name }}, {{ repo.description }},
+            it is private: {{ repo.isPrivate ? 'true' : 'false' }}
+        </li>
+    }
+</ul>
