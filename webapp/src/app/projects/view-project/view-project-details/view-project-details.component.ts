@@ -33,7 +33,8 @@ export class ViewProjectDetailsComponent implements OnInit {
         repository: new FormGroup({
             repositoryName: new FormControl({value: '', disabled: true}),
             repoHookId: new FormControl({value: '', disabled: true}),
-            repoHookUrl: new FormControl({value: '', disabled: true}),
+            isPrivateRepo: new FormControl({value: false, disabled: true}),
+            // repoHookUrl: new FormControl({value: '', disabled: true}),
         })
 
     });
@@ -55,8 +56,9 @@ export class ViewProjectDetailsComponent implements OnInit {
             createdDt: this.datePipe.transform(this.project().createdAt, 'M/d/yyyy') ,
             repository: {
                 repositoryName: this.project().repo.name,
-                repoHookUrl: this.project().repo.url,
+                // repoHookUrl: this.project().repo.url,
                 repoHookId: this.project().repo.hookId,
+                isPrivateRepo: this.project().repo.isPrivate,
             }
         });
         if (this.project().status === 'archived') {

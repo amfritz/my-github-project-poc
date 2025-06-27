@@ -1,24 +1,32 @@
-.new-event {
+:host {
     position: sticky;
     top: 0;
     background: bisque;
-    margin: auto;
+    /*margin: auto;*/
     padding: 0.5rem;
-}
-.new-event > * {
-    display: inline-block;
-    margin: 0.2rem;
-    padding: 0.2rem;
-    vertical-align: top;
+    display: grid;
+    grid-template-columns: [col-1-start] 6rem [col-1-end col-2-start] 1fr [col-2-end col-3-start] 6rem [col-3-end];
+    grid-template-rows: [row-1-start] 1fr [row-1-end row-2-start] 1fr [row-2-end];
+    gap: 0.2rem;
 }
 
-.disabled {
-    background-color: bisque;
-    color: darkgray;
-    cursor: not-allowed;
+.event-date {
+    grid-column: col-1-start / span 1;
+    grid-row: row-1-start / span 1;
+}
+.event-time {
+    grid-column: col-1-start / span 1;
+    grid-row: row-2-start / span 1;
 }
 
-button {
+.event-text {
+    grid-column: col-2-start / span 1;
+    grid-row: row-1-start / span 2;
+}
+
+.event-button {
+    grid-column: col-3-start / span 1;
+    grid-row: row-1-start / span 2;
     font: inherit;
     cursor: pointer;
     border: none;
@@ -27,4 +35,10 @@ button {
     background-color: brown;
     color: white;
     margin: auto  0.5rem;
+}
+
+.disabled {
+    background-color: bisque;
+    color: darkgray;
+    cursor: not-allowed;
 }

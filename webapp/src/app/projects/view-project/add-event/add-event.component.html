@@ -1,6 +1,8 @@
-<div class="new-event">
-    <input [disabled]="!editable()" type="date" [(ngModel)]="newEventDate" />
-    <input [disabled]="!editable()" type="time" [(ngModel)]="newEventTime" />
-    <textarea [disabled]="!editable()" cols="75" rows="3" [(ngModel)]="newEventDescription" placeholder="Enter new event description"></textarea>
-    <button  [class.disabled]="!canAdd()" [disabled]="!canAdd()" (click)="onAdd()">Add new event</button>
-</div>
+<input class="event-date" [disabled]="!editable()" type="date" [(ngModel)]="newEventDate" />
+<input class="event-time" [disabled]="!editable()" type="time" [(ngModel)]="newEventTime" />
+<textarea class="event-text"
+          [disabled]="!editable()" cols="75" rows="3"
+          [(ngModel)]="newEventDescription"
+          placeholder="Enter new event description">
+</textarea>
+<button class="event-button" [class.disabled]="!canAdd()" [disabled]="!canAdd()" (click)="onAdd()">Add new event</button>

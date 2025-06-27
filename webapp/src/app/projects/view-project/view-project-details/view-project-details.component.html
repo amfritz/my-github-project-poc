@@ -29,13 +29,20 @@
                 <input id="repoName" name="repoName" type="text" formControlName="repositoryName" >
             </div>
             <div class="form-item">
+                <label for="repoHookId">Hook Id:</label>
+                <input id="repoHookId" name="repoHookId" type="text" formControlName="repoHookId" />
+            </div>
+            <div class="form-item">
+                <label for="isPrivateRepo">Private repository:</label>
+                <input id="isPrivateRepo" name="isPrivateRepo" type="checkbox" formControlName="isPrivateRepo"  />
+            </div>
+        </div>
+        <div class="control-row">
+            <div class="form-item">
                 <label for="repoUrl">Repository URL:</label>
-                <input id="repoUrl" name="repoUrl" type="text" formControlName="repoHookUrl" />
+                <a [href]="project().repo.url" target="_blank">{{project().repo.url}}</a>
+<!--                <input id="repoUrl" name="repoUrl" type="text" formControlName="repoHookUrl" />-->
             </div>
-            </div>
-        <div class="form-item">
-            <label for="repoHookId">Hook Id:</label>
-            <input id="repoHookId" name="repoHookId" type="text" formControlName="repoHookId" />
         </div>
 
     </fieldset>
