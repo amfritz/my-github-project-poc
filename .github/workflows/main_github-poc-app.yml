@@ -25,9 +25,12 @@ jobs:
           java-version: '21'
           distribution: 'microsoft'
 
-      - name: install node
-        run: mvn frontend:1.15.1:install-node-and-npm -DnodeVersion=v22.14.0
-      - name: fix permissions
+       # Step 1: Run only the npm install phase to trigger node download
+      - name: Run frontend-maven-plugin to trigger node install
+        run: mvn com.github.eirslett:frontend-maven-plugin:1.15.1:npm@npm-install || true
+
+      # Step 2: Fix permissions on the downloaded node binary
+      - name: Fix permissions on Node.js binary
         run: |
           if [ -f ./webapp/node/node ]; then
             chmod +x ./webapp/node/node
