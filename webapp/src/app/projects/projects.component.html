@@ -1,7 +1,5 @@
 <h1>My GitHub Project - POC</h1>
-<p>A small proof of concept project to learn some new things and in the course of that effort capture git commit messages to automate part of a development log
-on a per-project (repository) basis. Designed for a single developer usage (i.e. me).</p>
-<h3>Project List:</h3>
+<h2>Project List:</h2>
     @if (isLoading) {
        <div class="spinner-container">
         <div class="spinner"></div>
@@ -9,7 +7,7 @@ on a per-project (repository) basis. Designed for a single developer usage (i.e.
     </div>
     }
 @else if (projects.length==0) {
-    <p>You don't have any project. Do you want to <a [routerLink]="'/create-project'"> create one from </a>a repository?</p>
+    <p>You don't have any projects.  <a [routerLink]="'/create-project'">Create one from </a>one of your GitHub repositories.</p>
 }
 @else {
     <div class="project-list">
@@ -23,3 +21,19 @@ on a per-project (repository) basis. Designed for a single developer usage (i.e.
     </div>
     <div class="new-project"><a class="link" [routerLink]="'/create-project'">Create a new project</a></div>
 }
+<hr/>
+<app-display-toggle>
+    <h2 header>About this project</h2>
+    <h3>A small proof of concept project to extract commit message from GitHub to automate a development log for personal projects.</h3>
+    <p> Start by selecting a repository from my GitHub account, and use that to create a project. It previews the available commits for the project which can be used to seed the development log
+        for my personal project. It is a good practice to leave detailed commit messages.</p>
+
+    <p>When the project is created a webhook is also created for the repository to capture ongoing commits whenever they are pushed to
+        the repository. These events can be viewed in sorted order (ascending or descending) and allows me to add new ones, edit the existing ones, or delete any superfluous ones. Drag an drop is viable to combine events that are closely related and don't need separate events.</p>
+    <p>A project can be archived which removes the webhook and stops any ongoing commit logs. Once archived it can be deleted if so desired.</p>
+    <p>This was a small project ot learn some new things (Cosmos DB, Angular 19+, GitHub APIs and webhooks) and to get familiar with those technologies to build a larger project for my personal project work. It was also to get some
+        practice with CSS and styling (which, I'm not a designer, it's definitely 'programmer' level. It's why my personal site is
+        called <a href="https://www.functionalnotpretty.dev/" target="_blank">Functional, not Pretty</a>.</p>
+    <p>The project is deployed to a free tier Azure app service and uses the aforementioned Azure Cosmos DB for its datastore. The backend is Spring Boot (3.4 because the Azure libraries don't support 3.5 yet) and I use the embedded server to also serve up the Angular front end. </p>
+
+</app-display-toggle>
