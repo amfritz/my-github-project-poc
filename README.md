@@ -20,6 +20,8 @@ I learned a bit about Cosmos DB and NoSQL databases. I created an Angular 19 fro
 
 When I started I didn't know about MapStruct, but discovered it via Medium which I subscribed to on June 1. I really like MapStruct and avoid some of the drudgery of using DTOs.
 
-The CD/CI action in GitHub isn't working (it is all maven), though the command works locally. All in all a successful quick sort of project. 
+~~The CD/CI action in GitHub isn't working (it is all maven), though the command works locally.~~ The build works, but the page throws an error when trying to load the webapp, which the locally built version does not do.
+
+All in all a successful quick sort of project. 
 
 It is functional for what I needed, but it definitely isn't pretty despite my attempts at wrangling some CSS. I think the next steps are to get some framework help in that department with Material or Tailwind.

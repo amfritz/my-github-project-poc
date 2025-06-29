@@ -1,13 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { ProjectsService } from '../services/projects.service';
 import { ProjectEntity } from '../models/project';
 import { RouterLink } from '@angular/router';
+import {DisplayToggleComponent} from '../shared/display-toggle/display-toggle.component';
 
 @Component({
-  selector: 'app-watched-repos',
-  imports: [RouterLink],
-  templateUrl: './projects.component.html',
-  styleUrl: './projects.component.css'
+    selector: 'app-watched-repos',
+    imports: [RouterLink, DisplayToggleComponent],
+    templateUrl: './projects.component.html',
+    styleUrl: './projects.component.css'
 })
 export class ProjectsComponent implements OnInit {
   private projectService = inject(ProjectsService);

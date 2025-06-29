@@ -98,7 +98,7 @@ export class CreateProjectComponent implements OnInit {
                 let commit = this.gitCommits()[i];
                 initEvents.push({
                     eventDescription: commit.commit.message, eventDate: commit.commit.author.date,
-                    isNewEvent: true, repoName: this.selectedRepo?.name
+                    isNewEvent: false, repoName: this.selectedRepo?.name
                 });
             }
         }

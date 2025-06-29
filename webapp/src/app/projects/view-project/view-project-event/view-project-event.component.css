@@ -1,11 +1,11 @@
-.event-item {
+:host {
     border-radius: 4px;
     margin: 0.4rem auto;
     padding: 0;
+    display: flex;
 }
 
 .desc {
-    display: inline-block;
     padding: 0.5rem;
     /*border: 1px solid black;*/
     border-radius: 4px;
@@ -13,10 +13,10 @@
     color: white;
     margin: 0.4rem auto;
     background: chocolate;
-    width: 80%;
     min-height: 1rem;
     cursor: initial;
     white-space: pre-wrap;
+    flex: 1;
 }
 
 .new-event {
@@ -36,21 +36,19 @@
 }
 
 .event-actions {
-    display: inline-block;
     /*outline: 1px solid black;*/
     align-self: center;
+    width: 10rem;
 }
 
 .event-date {
     padding: 0;
     margin: 0.4rem;
-    display: inline-block;
-    /*border: 1px solid #ccc;*/
-    width: 15%;
+    width: 8rem;
     vertical-align: top;
 }
 
-button {
+.btn {
     font: inherit;
     cursor: pointer;
     border: none;
@@ -58,6 +56,6 @@ button {
     border-radius: 4px;
     background-color: brown;
     color: white;
-    margin: auto ;
+    margin: 0.4rem;
     ;
 }

@@ -167,6 +167,12 @@
 								<resource>
 									<directory>${project.basedir}/webapp/dist/webapp/browser</directory>
 								</resource>
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<includes>
+										<include>rewrite.config</include>
+									</includes>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>

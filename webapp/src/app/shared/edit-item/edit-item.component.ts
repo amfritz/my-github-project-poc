@@ -25,4 +25,10 @@ export class EditItemComponent implements OnInit {
     onCancel() {
         this.close.emit(this.initialDescription);
     }
+    
+    onKeyDown(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            this.onCancel();
+        }
+    }
 }

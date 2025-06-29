@@ -53,7 +53,7 @@ export class EventListComponent implements OnInit {
     // add a user created event
     onAddEvent(newEvent: NewEvent) {
         let evt: ProjectEvents = {
-            id: '', eventDescription: newEvent.description, projectId: this.projectId(), eventDate: newEvent.date, isNewEvent: true,
+            id: '', eventDescription: newEvent.description, projectId: this.projectId(), eventDate: newEvent.date, isNewEvent: false,
         }
         // TODO -- events probably don't need the repo name because that's at the project level
         // console.log('new event: ', evt);

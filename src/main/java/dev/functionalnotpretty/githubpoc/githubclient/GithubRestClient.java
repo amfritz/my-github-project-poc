@@ -55,6 +55,7 @@ public class GithubRestClient {
     }
 
     public ResponseEntity<List<GitHubRepoCommit>>  getRepoCommitsPaginated(String uri) {
+        log.debug("fetching: {}", uri);
         return this.githubRestClient.get()
                 .uri(uri)
                 .retrieve()

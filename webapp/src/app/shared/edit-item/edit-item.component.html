@@ -1,5 +1,5 @@
 <div class="backdrop" (click)="onCancel()"></div>
-<dialog open>
+<dialog open (keydown)="onKeyDown($event)">
     <h2>Edit Description</h2>
         <div>
             <label for="description">Event description</label>

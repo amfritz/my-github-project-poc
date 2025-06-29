@@ -1,4 +1,4 @@
-import {Component, input, model, output, signal} from '@angular/core';
+import {Component, Host, HostListener, input, model, output, signal} from '@angular/core';
 import {DatePipe} from "@angular/common";
 import {ProjectEvents} from '../../../models/project-events';
 import {EditItemComponent} from '../../../shared/edit-item/edit-item.component';
@@ -9,8 +9,14 @@ import {EditItemComponent} from '../../../shared/edit-item/edit-item.component';
         DatePipe,
         EditItemComponent
     ],
-  templateUrl: './view-project-event.component.html',
-  styleUrl: './view-project-event.component.css'
+    host: {
+        '(mouseenter)': 'onMouseEnter()',
+        '(mouseleave)': 'onMouseLeave()',
+        '(focus)': 'onFocus()',
+        '(click)': 'onFocus()',
+    },
+    templateUrl: './view-project-event.component.html',
+    styleUrl: './view-project-event.component.css'
 })
 export class ViewProjectEventComponent {
     event = input.required<ProjectEvents>();
@@ -20,6 +26,7 @@ export class ViewProjectEventComponent {
     value = output<string>();
     visited = output();
     showEdit = signal(false);
+    hasFocus = signal(false);
     selfDropFlag = false;
     dropTaget = false;
 
@@ -27,6 +34,11 @@ export class ViewProjectEventComponent {
         if (this.event().isNewEvent) {
             this.visited.emit();
         }
+        this.hasFocus.set(true);
+    }
+
+    onMouseLeave() {
+        this.hasFocus.set(false);
     }
 
 
@@ -38,7 +50,7 @@ export class ViewProjectEventComponent {
     }
     updateEventDesc(newDesc:string) {
         if (newDesc !== null) {
-            if (newDesc === '' && this.canDelete()) {
+            if (newDesc.trim() === '' && this.canDelete()) {
                 this.delete.emit();
             } else if (newDesc !== this.event().eventDescription) {
                 this.value.emit(newDesc);
@@ -46,6 +58,13 @@ export class ViewProjectEventComponent {
         }
         this.showEdit.set(false);
     }
+
+    onFocus() {
+        if (this.event().isNewEvent) {
+            this.visited.emit();
+        }
+        this.hasFocus.set(true);
+    }   
 
     onDragStart(drag:DragEvent){
         drag.dataTransfer?.setData('text/plain', JSON.stringify(this.event()));

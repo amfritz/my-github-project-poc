@@ -1,21 +1,32 @@
-<div class="event-item" >
     <div class="event-date">{{ event().eventDate|  date:'short' }}</div>
     <div class="desc"
+        tabindex="0"
+        (keydown.enter)="showEditDialog()"
+        (keydown.delete)="delete.emit()"
+        (focus))="onFocus()"
+        (blur)="hasFocus.set(false)"
          [draggable]="editable()"
          (dblclick)="showEditDialog()"
          (dragstart)="onDragStart($event)"
          (dragover)="onDragOver($event)"
          (drop)="onDrop($event)"
          (dragend)="onDragEnd($event)"
-         [class.new-event]="event().isNewEvent"
-         (mouseenter)="onMouseEnter()">
+         [class.new-event]="event().isNewEvent">
          @if(event().isNewEvent) {
         <div class="new-event-label">(new)</div>
          }
         {{ event().eventDescription }}
     </div>
-
+<div class="event-actions">
+    @if (hasFocus()) {
+        @if(editable()) {
+            <button class="btn" (click)="showEditDialog()">Edit</button>
+            <button class="btn" (click)="delete.emit()">Delete</button>
+        }
+    }
 </div>
+
+
 @if(showEdit()) {
     <app-edit-item  [description]="event().eventDescription" (close)="updateEventDesc($event)"></app-edit-item>
 }

@@ -32,7 +32,7 @@ public class RepoService {
     }
 
     public List<GitHubRepoCommit> getRepoCommits(String userId, String repoName) {
-        log.info("getUserRepoCommits called");
+        log.info("getUserRepoCommits called, userId={}, repoName={}", userId, repoName);
 
         ResponseEntity<List<GitHubRepoCommit>> resp = this.githubRestClient.getRepoCommitsByUser(userId,repoName);
         var commits = resp.getBody();
@@ -40,6 +40,7 @@ public class RepoService {
             return new ArrayList<>();
         }
 
+        log.info("read {} commits", commits.size());
         var result = new ArrayList<>(commits);
 
             // check headers to see if there's a link for more commits. if so, iterate though the pages
@@ -47,8 +48,10 @@ public class RepoService {
         if ((linkHeader != null) && (!linkHeader.isEmpty())) {
             boolean next = true;
             do {
+                log.info("link header: {}", linkHeader);
                 String[] pageLinks = StringUtils.split(linkHeader.getFirst(), ',');
                 for (String s : pageLinks) {
+                    log.info("link: {}", s);
                     // the links could have rel="first", rel="prev", rel="next", rel="last" sent. only get the next one.
                     // if no next then we are at the end and break out.
                     String[] split = StringUtils.split(s, ';');
@@ -58,9 +61,12 @@ public class RepoService {
                         log.info("getUserRepoCommits next pagination link [{}]", uri);
                         ResponseEntity<List<GitHubRepoCommit>> page = this.githubRestClient.getRepoCommitsPaginated(uri);
                          var pageCommits = page.getBody();
+                         log.info("read {} commits", pageCommits == null? 0 : pageCommits.size());
                         if (pageCommits != null && !pageCommits.isEmpty()) {
                             result.addAll(pageCommits);
                         }
+                        linkHeader = page.getHeaders().get(GithubRestClient.GITHUB_LINK_HEADER);
+                        break;
                     }
                     else {
                         next = false;
